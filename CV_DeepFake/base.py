@@ -6,6 +6,7 @@ import matplotlib.pylab as plt
 import face_recognition
 from PIL import Image,ImageDraw
 
+
 plt.style.use('ggplot')
 train_dir = '/Users/jatinarora/deepfake-detection-challenge/train_sample_videos/'
 fig, ax = plt.subplots(1,1, figsize=(15, 15))
@@ -13,7 +14,7 @@ train_video_files = [train_dir + x for x in os.listdir(train_dir)]
 # video_file = train_video_files[30]
 
 ## Getting the first frame
-video_file = '/Users/jatinarora/deepfake-detection-challenge/train_sample_videos/akxoopqjqz.mp4'
+video_file = '/Users/jatinarora/CV_DeepFake/manipulated_sequences/Deepfakes/raw/videos/469_481.mp4'
 cap = cv.VideoCapture(video_file)
 success, image = cap.read()
 image = cv.cvtColor(image, cv.COLOR_BGR2RGB)
