@@ -3,20 +3,28 @@ import cv2 as cv
 import face_recognition
 import math
 
+import matplotlib.pylab as plt
 
-def get_frames(video_path,number_of_frames=1):
+def get_frames(video_path,number_of_frames=1,startingPoint=0):
     cap = cv.VideoCapture(video_path)
+    cap.set(1,startingPoint)
     images=[]
-    for i in range(1,number_of_frames):
+    for i in range(0,number_of_frames):
         success, image = cap.read()
         image = cv.cvtColor(image, cv.COLOR_BGR2RGB)
         images.append(image)
+        # fig, ax = plt.subplots(1, 1, figsize=(5, 5))
+        # plt.grid(False)
+        # ax.xaxis.set_visible(False)
+        # ax.yaxis.set_visible(False)
+        # ax.imshow(image)
+        # plt.show()
     cap.release()
     return images
 
 def get_faces(frames,height=-1,width=-1):
     face_images = []
-    for i in range(1, len(frames)):
+    for i in range(0, len(frames)):
         face_locations = face_recognition.face_locations(frames[i])
         for face_location in face_locations:
             top, right, bottom, left = face_location
@@ -45,6 +53,18 @@ def get_faces(frames,height=-1,width=-1):
     return face_images
 
 
+def get_cropped_images(frames,height,width):
+    images = []
+    for i in range(0, len(frames)):
+        frame = frames[i];
+        rows,cols,channels = frame.shape
+        dist_height = height/2
+        top = math.ceil(rows/2)-math.ceil(dist_height)
+        bottom = math.ceil(rows/2)+math.floor(dist_height)
+        dist_width = width/2
+        left = math.ceil(cols/2)-math.ceil(dist_width)
+        right = math.ceil(cols/2)+math.floor(dist_width)
+        images.append(frame[top:bottom,left:right])
 
-
+    return images
 
