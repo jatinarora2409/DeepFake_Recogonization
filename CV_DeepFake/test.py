@@ -10,8 +10,8 @@ framesFromFile2 = 300
 height = 200
 width = 200
 
-file1 = '../../manipulated_sequences/Deepfakes/raw/videos/183_253.mp4'
-file2 = '../../original_sequences/youtube/raw/videos/183.mp4'
+file1 = '../manipulated_sequences/Deepfakes/raw/videos/183_253.mp4'
+file2 = '../original_sequences/youtube/raw/videos/183.mp4'
 
 
 def train_model():
@@ -77,7 +77,7 @@ def test_model():
     y_test_result = model.predict(X_test)
     print("result:", y_test_result)
 
-train_model()
+#train_model()
 test_model()
 
 
