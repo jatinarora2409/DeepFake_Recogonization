@@ -79,7 +79,7 @@ def test_model():
     y_test_result = model.predict(X_test)
     print("result:", y_test_result)
 
-train_model()
+#train_model()
 test_model()
 
 
