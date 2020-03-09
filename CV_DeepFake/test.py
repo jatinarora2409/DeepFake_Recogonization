@@ -10,8 +10,8 @@ framesFromFile2 = 300
 height = 200
 width = 200
 
-file1 = '../../manipulated_sequences/Deepfakes/raw/videos/183_253.mp4'
-file2 = '../../original_sequences/youtube/raw/videos/183.mp4'
+file1 = '../manipulated_sequences/Deepfakes/raw/videos/183_253.mp4'
+file2 = '../original_sequences/youtube/raw/videos/183.mp4'
 
 
 def train_model():
