@@ -2,7 +2,7 @@ from face_detect_util.get_face import get_frames, get_faces,get_cropped_images
 from CNN.model import get_CNN_Model, get_CNN_Model_ForClassification,getRNNModel
 import numpy as np
 import sys
-from keras.models import load_model
+from keras.models import load_model,Model
 
 framesFromFile1 = 300
 framesFromFile2 = 300
@@ -20,6 +20,8 @@ def train_model():
     facesIncorrect = get_faces(frames,height=height,width=width)
     facesIncorrect = np.asarray(facesIncorrect)
     del frames
+
+    / usr / local / cuda / bin: / usr / local / bin: / opt / aws / bin: / home / ec2 - user / src / cntk / bin: / usr / local / mpi / bin: / home / ec2 - user / anaconda3 / bin /: / usr / libexec / gcc / x86_64 - redhat - linux / 7: / usr / local / cuda / bin: / usr / local / bin: / opt / aws / bin: / usr / local / mpi / bin: / usr / local / cuda / bin: / usr / local / bin: / opt / aws / bin: / home / ec2 - user / src / cntk / bin: / usr / local / mpi / bin: / usr / libexec / gcc / x86_64 - redhat - linux / 7: / usr / local / cuda / bin: / usr / local / bin: / opt / aws / bin: / usr / local / mpi / bin: / usr / local / bin: / usr / bin: / usr / local / sbin: / usr / sbin: / home / ec2 - user /.local / bin: / home / ec2 - user / bin
 
     frames = get_frames(file2, framesFromFile2)
     facesCorrect = get_faces(frames, height=height, width=width)
@@ -74,7 +76,7 @@ def test_model():
     X_test = np.concatenate((facesCorrectTest, facesInCorrectTest))
     del framesTest
 
-    y_test_result = model.predict_classes(X_test)
+    y_test_result = model.predict(X_test)
     print("result:", y_test_result)
 
 train_model()
