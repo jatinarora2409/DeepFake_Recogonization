@@ -46,7 +46,7 @@ def getRNNModel(height,width,channels):
     base_model = applications.resnet50.ResNet50(weights=None, include_top=False, input_shape=(height, width, channels))
     x = base_model.output
     x = GlobalAveragePooling2D()(x)
-    x = Dropout(0.7)(x)
+    x = Dropout(0.2)(x)
     predictions = Dense(2, activation='softmax')(x)
     model = Model(inputs=base_model.input, outputs=predictions)
     adam = Adam(lr=0.0001)
