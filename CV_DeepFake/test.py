@@ -12,10 +12,12 @@ framesFromFile2 = 500
 height = 200
 width = 200
 
+facesCorrect = np.empty();
+facesIncorrect = np.empty();
+
 def get_all_files(folder):
     filepaths = [os.path.join(folder, f) for f in os.listdir(folder)]
     return filepaths
-
 
 def train_model(files_original,files_fake):
     np.set_printoptions(threshold=sys.maxsize)
@@ -24,20 +26,14 @@ def train_model(files_original,files_fake):
         frames = get_frames(original_file, framesFromFile1, startingPoint=0)
         tempFaces = get_faces(frames,height=height,width=width)
         tempFaces = np.asarray(tempFaces)
-        if facesCorrect is None:
-            facesCorrect = tempFaces
-        else:
-            facesCorrect = np.append(facesCorrect, tempFaces)
+        facesCorrect = np.append(facesCorrect, tempFaces)
         del frames
 
     for fake_file in files_fake:
         frames = get_frames(fake_file, framesFromFile2)
         tempFaces = get_faces(frames, height=height, width=width)
         tempFaces = np.asarray(tempFaces)
-        if facesIncorrect is None:
-            facesIncorrect = tempFaces
-        else:
-            facesIncorrect = np.append(facesIncorrect, tempFaces)
+        facesIncorrect = np.append(facesIncorrect, tempFaces)
         del frames
 
 
