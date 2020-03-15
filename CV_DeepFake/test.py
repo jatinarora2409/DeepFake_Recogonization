@@ -24,20 +24,20 @@ def train_model(files_original,files_fake):
         frames = get_frames(original_file, framesFromFile1, startingPoint=0)
         tempFaces = get_faces(frames,height=height,width=width)
         tempFaces = np.asarray(tempFaces)
-        if(facesCorrect==None):
+        if facesCorrect is None:
             facesCorrect = tempFaces
-
-        facesCorrect = np.append(facesCorrect, tempFaces)
+        else:
+            facesCorrect = np.append(facesCorrect, tempFaces)
         del frames
 
     for fake_file in files_fake:
         frames = get_frames(fake_file, framesFromFile2)
         tempFaces = get_faces(frames, height=height, width=width)
         tempFaces = np.asarray(tempFaces)
-        if facesIncorrect==None:
+        if facesIncorrect is None:
             facesIncorrect = tempFaces
-
-        facesIncorrect = np.append(facesIncorrect, tempFaces)
+        else:
+            facesIncorrect = np.append(facesIncorrect, tempFaces)
         del frames
 
 
