@@ -9,7 +9,9 @@ def get_frames(video_path,number_of_frames=1,startingPoint=0):
     cap = cv.VideoCapture(video_path)
     cap.set(1,startingPoint)
     images=[]
-    for i in range(0,number_of_frames):
+    length = int(cap.get(cv.CAP_PROP_FRAME_COUNT))
+
+    for i in range(0,min(number_of_frames,length)):
         success, image = cap.read()
         image = cv.cvtColor(image, cv.COLOR_BGR2RGB)
         images.append(image)

@@ -21,6 +21,7 @@ def train_model(files_original,files_fake):
     np.set_printoptions(threshold=sys.maxsize)
 
     for original_file in files_original:
+        print(original_file)
         frames = get_frames(original_file, framesFromFile1, startingPoint=0)
         tempFaces = get_faces(frames,height=height,width=width)
         tempFaces = np.asarray(tempFaces)
