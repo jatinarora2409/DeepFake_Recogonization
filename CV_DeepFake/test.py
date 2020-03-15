@@ -3,28 +3,36 @@ from CNN.model import get_CNN_Model, get_CNN_Model_ForClassification,getRNNModel
 import numpy as np
 import sys
 from keras.models import load_model,Model
+import os
+from os.path import isfile, join
 
-framesFromFile1 = 300
-framesFromFile2 = 300
+framesFromFile1 = 500
+framesFromFile2 = 500
 
 height = 200
 width = 200
 
-file1 = '../manipulated_sequences/Deepfakes/raw/videos/469_481.mp4'
-file2 = '../original_sequences/youtube/raw/videos/481.mp4'
+def get_all_files(folder):
+    filepaths = [os.path.join(folder, f) for f in os.listdir(folder)]
+    return filepaths
 
 
-def train_model():
+def train_model(files_original,files_fake):
     np.set_printoptions(threshold=sys.maxsize)
-    frames = get_frames(file1, framesFromFile1, startingPoint=0)
-    facesIncorrect = get_faces(frames,height=height,width=width)
-    facesIncorrect = np.asarray(facesIncorrect)
-    del frames
-    
-    frames = get_frames(file2, framesFromFile2)
-    facesCorrect = get_faces(frames, height=height, width=width)
-    facesCorrect = np.asarray(facesCorrect)
-    del frames
+
+    for original_file in files_original:
+        frames = get_frames(original_file, framesFromFile1, startingPoint=0)
+        tempFaces = get_faces(frames,height=height,width=width)
+        tempFaces = np.asarray(tempFaces)
+        facesCorrect = np.append(facesCorrect, tempFaces)
+        del frames
+
+    for fake_file in files_fake:
+        frames = get_frames(fake_file, framesFromFile2)
+        tempFaces = get_faces(frames, height=height, width=width)
+        tempFaces = np.asarray(tempFaces)
+        facesIncorrect = np.append(facesIncorrect, tempFaces)
+        del frames
 
 
     count_incorrect = len(facesIncorrect)
@@ -55,6 +63,8 @@ def train_model():
 def test_model():
     model = load_model('classification.h5')
     correct_test_faces = 10
+    file1 = '../manipulated_sequences/Deepfakes/raw/videos/469_481.mp4'
+    file2 = '../original_sequences/youtube/raw/videos/481.mp4'
     framesTest = get_frames(file1, correct_test_faces, startingPoint=100)
     facesCorrectTest = get_cropped_images(framesTest, height=height, width=width)
     facesCorrectTest = np.asarray(facesCorrectTest)
@@ -69,7 +79,8 @@ def test_model():
     y_test_result = model.predict(X_test)
     print("result:", y_test_result)
 
-train_model()
+files_fake = get_all_files('../manipulated_sequences/Deepfakes/raw/videos/')
+files_original = get_all_files('../original_sequences/youtube/raw/videos/')
+
+train_model(files_original,files_fake)
 test_model()
-
-
