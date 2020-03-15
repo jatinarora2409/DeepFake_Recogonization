@@ -12,8 +12,6 @@ framesFromFile2 = 500
 height = 200
 width = 200
 
-facesCorrect = np.empty();
-facesIncorrect = np.empty();
 
 
 
