@@ -56,7 +56,7 @@ def train_model(files_original,files_fake):
     np.random.shuffle(s)
 
     model = getRNNModel(height,width,3)
-    epochs = 50;
+    epochs = 20;
     print(y_train)
     model.fit(x_train[s], y_train[s], validation_split=0.2, shuffle=True, epochs=epochs, batch_size=20, verbose=1)
     model.save('classification.h5')
