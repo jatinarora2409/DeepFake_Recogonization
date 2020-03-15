@@ -21,10 +21,12 @@ def train_model(files_original,files_fake):
     np.set_printoptions(threshold=sys.maxsize)
 
     for original_file in files_original:
-        print(original_file)
         frames = get_frames(original_file, framesFromFile1, startingPoint=0)
         tempFaces = get_faces(frames,height=height,width=width)
         tempFaces = np.asarray(tempFaces)
+        if(facesCorrect==None):
+            facesCorrect = tempFaces
+
         facesCorrect = np.append(facesCorrect, tempFaces)
         del frames
 
@@ -32,6 +34,9 @@ def train_model(files_original,files_fake):
         frames = get_frames(fake_file, framesFromFile2)
         tempFaces = get_faces(frames, height=height, width=width)
         tempFaces = np.asarray(tempFaces)
+        if facesIncorrect==None:
+            facesIncorrect = tempFaces
+
         facesIncorrect = np.append(facesIncorrect, tempFaces)
         del frames
 
