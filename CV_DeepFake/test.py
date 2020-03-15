@@ -12,9 +12,6 @@ framesFromFile2 = 500
 height = 200
 width = 200
 
-
-
-
 def get_all_files(folder):
     filepaths = [os.path.join(folder, f) for f in os.listdir(folder)]
     return filepaths
@@ -22,23 +19,27 @@ def get_all_files(folder):
 def train_model(files_original,files_fake):
     np.set_printoptions(threshold=sys.maxsize)
     tempFaces = []
-
+    print( files_original)
+    print(files_fake)
     for original_file in files_original:
         frames = get_frames(original_file, framesFromFile1, startingPoint=0)
-        tempFaces.append(get_faces(frames,height=height,width=width))
+        tempFaces.extend(get_faces(frames,height=height,width=width))
         del frames
 
     facesCorrect = np.asarray(tempFaces);
     tempFaces = [];
     for fake_file in files_fake:
         frames = get_frames(fake_file, framesFromFile2)
-        tempFaces.append(get_faces(frames, height=height, width=width))
+        tempFaces.extend(get_faces(frames, height=height, width=width))
         del frames
     facesIncorrect = np.asarray(tempFaces)
 
     count_incorrect = len(facesIncorrect)
     count_correct = len(facesCorrect)
-
+    print("count_incorrect")
+    print(count_incorrect)
+    print("\n\n count_correct")
+    print(count_correct)
 
     x_train = np.concatenate((facesIncorrect, facesCorrect))
     labels = []
@@ -55,7 +56,7 @@ def train_model(files_original,files_fake):
     np.random.shuffle(s)
 
     model = getRNNModel(height,width,3)
-    epochs = 100;
+    epochs = 50;
     print(y_train)
     model.fit(x_train[s], y_train[s], validation_split=0.2, shuffle=True, epochs=epochs, batch_size=20, verbose=1)
     model.save('classification.h5')
