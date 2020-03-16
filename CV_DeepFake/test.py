@@ -85,9 +85,9 @@ def test_model(files):
                 count_doubt = count_doubt+1
 
         print("File: "+file)
-        print("count_fake: "+count_fake)
-        print("count_true:" +count_true)
-        print("count_doubt" +count_doubt)
+        print("count_fake: "+str(count_fake))
+        print("count_true:" +str(count_true))
+        print("count_doubt" +str(count_doubt))
         print("\n")
         del frames
 
