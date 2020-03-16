@@ -10,7 +10,8 @@ def get_frames(video_path,number_of_frames=1,startingPoint=0):
     cap.set(1,startingPoint)
     images=[]
     length = int(cap.get(cv.CAP_PROP_FRAME_COUNT))
-
+    if(number_of_frames==-1):
+        number_of_frames=100000000000
     for i in range(0,min(number_of_frames,length)):
         success, image = cap.read()
         image = cv.cvtColor(image, cv.COLOR_BGR2RGB)

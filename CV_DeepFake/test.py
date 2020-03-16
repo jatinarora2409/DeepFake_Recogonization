@@ -62,27 +62,56 @@ def train_model(files_original,files_fake):
     model.save('classification.h5')
 
 
-def test_model():
+def test_model(files):
     model = load_model('classification.h5')
-    correct_test_faces = 10
-    file1 = '../manipulated_sequences/Deepfakes/raw/videos/469_481.mp4'
-    file2 = '../original_sequences/youtube/raw/videos/481.mp4'
-    framesTest = get_frames(file1, correct_test_faces, startingPoint=100)
-    facesCorrectTest = get_cropped_images(framesTest, height=height, width=width)
-    facesCorrectTest = np.asarray(facesCorrectTest)
+    for file in files:
+        tempFaces = []
+        frames = get_frames(file, framesFromFile1=-1, startingPoint=0)
+        tempFaces.extend(get_faces(frames,height=height,width=width))
+        testFaces = np.asarray(tempFaces)
+        y_test_result = model.predict(testFaces)
+        count_fake = 0
+        count_doubt = 0
+        count_true = 0
+        for frame_result in y_test_result:
 
-    incorrect_test_faces = 10
-    framesTest = get_frames(file2, incorrect_test_faces, startingPoint=100)
-    facesInCorrectTest = get_faces(framesTest, height=height, width=width)
-    facesInCorrectTest = np.asarray(facesInCorrectTest)
-    X_test = np.concatenate((facesCorrectTest, facesInCorrectTest))
-    del framesTest
+            if (frame_result[0]-frame_result[1]>=0.3):
+               count_true = count_true+1
 
-    y_test_result = model.predict(X_test)
-    print("result:", y_test_result)
+            elif (frame_result[1]-frame_result[0]>=0.3):
+                count_fake = count_fake+1
 
-files_fake = get_all_files('../manipulated_sequences/Deepfakes/raw/videos/')
-files_original = get_all_files('../original_sequences/youtube/raw/videos/')
+            else:
+                count_doubt = count_doubt+1
 
-train_model(files_original,files_fake)
-test_model()
+        print("File: "+file)
+        print("count_fake: "+count_fake)
+        print("count_true:" +count_true)
+        print("count_doubt" +count_doubt)
+        print("\n")
+        del frames
+
+
+    # correct_test_faces = 10
+    # file1 = '../manipulated_sequences/Deepfakes/raw/videos/469_481.mp4'
+    # file2 = '../original_sequences/youtube/raw/videos/481.mp4'
+    # framesTest = get_frames(file1, correct_test_faces, startingPoint=100)
+    # facesCorrectTest = get_cropped_images(framesTest, height=height, width=width)
+    # facesCorrectTest = np.asarray(facesCorrectTest)
+    #
+    # incorrect_test_faces = 10
+    # framesTest = get_frames(file2, incorrect_test_faces, startingPoint=100)
+    # facesInCorrectTest = get_faces(framesTest, height=height, width=width)
+    # facesInCorrectTest = np.asarray(facesInCorrectTest)
+    # X_test = np.concatenate((facesCorrectTest, facesInCorrectTest))
+    # del framesTest
+    #
+    # y_test_result = model.predict(X_test)
+    # print("result:", y_test_result)
+
+#files_fake = get_all_files('../manipulated_sequences/Deepfakes/raw/videos/')
+#files_original = get_all_files('../original_sequences/youtube/raw/videos/')
+#train_model(files_original,files_fake)
+
+test_files = get_all_files('../test_files/')
+test_model(test_files)
