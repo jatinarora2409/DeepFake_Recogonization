@@ -66,7 +66,7 @@ def test_model(files):
     model = load_model('classification.h5')
     for file in files:
         tempFaces = []
-        frames = get_frames(file, framesFromFile1=-1, startingPoint=0)
+        frames = get_frames(file, number_of_frames=-1, startingPoint=0)
         tempFaces.extend(get_faces(frames,height=height,width=width))
         testFaces = np.asarray(tempFaces)
         y_test_result = model.predict(testFaces)
