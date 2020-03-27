@@ -71,23 +71,29 @@ def test_model(files):
         testFaces = np.asarray(tempFaces)
         y_test_result = model.predict(testFaces)
         count_fake = 0
-        count_doubt = 0
-        count_true = 0
+        count_positive = 0
+        count_clear_fake = 0
+        count_clear_positive = 0
+
         for frame_result in y_test_result:
 
             if (frame_result[0]-frame_result[1]>=0.3):
-               count_true = count_true+1
-
-            elif (frame_result[1]-frame_result[0]>=0.3):
+               count_clear_positive = count_clear_positive+1
+            elif (frame_result[0]-frame_result[1]>0):
+                count_positive = count_positive+1
+            elif(frame_result[1]-frame_result[0]>=0.3):
+                count_clear_fake = count_clear_fake+1
+            elif(frame_result[1]-frame_result[0]>0):
                 count_fake = count_fake+1
-
             else:
                 count_doubt = count_doubt+1
 
         print("File: "+file)
-        print("count_fake: "+str(count_fake))
-        print("count_true:" +str(count_true))
-        print("count_doubt" +str(count_doubt))
+        print("count_clear positive:" + str(count_clear_positive))
+        print("count_positive: " +str(count_positive))
+        print("count_fake: " + str(count_fake))
+        print("count_clear_fake: " + str(count_clear_fake))
+
         print("\n")
         del frames
 
