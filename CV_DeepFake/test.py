@@ -1,9 +1,10 @@
 from face_detect_util.get_face import get_frames, get_faces,get_cropped_images
-from CNN.model import get_CNN_Model, get_CNN_Model_ForClassification,getRNNModel
+from CNN.model import get_CNN_Model, get_CNN_Model_ForClassification,getRNNModel,getCNNInceptionModel
 import numpy as np
 import sys
 from keras.models import load_model,Model
 import os
+import cv2
 from os.path import isfile, join
 
 framesFromFile1 = 500
@@ -119,5 +120,16 @@ def test_model(files):
 #files_original = get_all_files('../original_sequences/youtube/raw/videos/')
 #train_model(files_original,files_fake)
 
-test_files = get_all_files('../test_files/')
-test_model(test_files)
+#test_files = get_all_files('../test_files/')
+#test_model(test_files)
+
+def check_output(file):
+    img = cv2.imread(file)
+    model = getCNNInceptionModel(img.shape[0],img.shape[1],img.shape[2])
+    output = model.predict(img)
+    print("\n\n SHAPE: ");
+    print(output.shape);
+    print("\n\n OUTPUT: ");
+    print(output);
+
+check_output('./car.jpg')
