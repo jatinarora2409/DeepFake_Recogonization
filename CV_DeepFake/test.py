@@ -143,7 +143,7 @@ def test_model(files):
 
 files_fake = get_all_files('../manipulated_sequences/Deepfakes/raw/videos/')
 files_original = get_all_files('../original_sequences/youtube/raw/videos/')
-train_model_RNN(files_original,files_fake)
+train_model_CNN_LSTM(files_original,files_fake)
 
 #test_files = get_all_files('../test_files/')
 #test_model(test_files)
