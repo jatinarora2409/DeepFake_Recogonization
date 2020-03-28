@@ -48,10 +48,10 @@ def get_faces_local(files_original,files_fake):
 def train_model_CNN_LSTM(files_original,files_fake):
     x_train,count_incorrect,count_correct = get_faces_local(files_original,files_fake)
     labels = []
-    for i in range (0,(count_incorrect)):
+    for i in range (0,len(files_fake)):
         labels.append([0,1])
 
-    for i in range(0, (count_correct)):
+    for i in range(0,len (files_original)):
         labels.append([1,0])
 
     CNN_model = getCNNInceptionModel(height,width,3)
