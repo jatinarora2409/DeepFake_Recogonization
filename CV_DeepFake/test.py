@@ -23,14 +23,14 @@ def get_faces_local(files_original,files_fake):
     print(files_original)
     print(files_fake)
     for original_file in files_original:
-        frames = get_frames(original_file, startingPoint=30,number_of_frames=40)
+        frames = get_frames(original_file, startingPoint=0,number_of_frames=40)
         tempFaces.extend(get_faces(frames, height=height, width=width))
         del frames
 
     facesCorrect = np.asarray(tempFaces);
     tempFaces = [];
     for fake_file in files_fake:
-        frames = get_frames(fake_file, number_of_frames=40,startingPoint=30)
+        frames = get_frames(fake_file, number_of_frames=40,startingPoint=0)
         tempFaces.extend(get_faces(frames, height=height, width=width))
         del frames
     facesIncorrect = np.asarray(tempFaces)
@@ -146,7 +146,7 @@ files_fake = get_all_files('../manipulated_sequences/Deepfakes/raw/videos/')
 files_original = get_all_files('../original_sequences/youtube/raw/videos/')
 file_original = ['../original.mp4']
 file_fake = ['../deepfake.mp4']
-train_model_CNN_LSTM(file_original,file_fake)
+train_model_CNN_LSTM(files_original,files_fake)
 
 #test_files = get_all_files('../test_files/')
 #test_model(test_files)
