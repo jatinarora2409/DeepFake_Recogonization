@@ -58,10 +58,10 @@ def train_model_CNN_LSTM(files_original,files_fake):
     input_for_LSTM = CNN_model.predict(x_train);
     input_for_LSTM = input_for_LSTM.reshape(len(files_original) + len(files_fake),40,2048)
     y_train = np.asarray(labels)
-    s = np.arange(len(x_train));
-    np.random.shuffle(s)
+
+
     LSTM_model = getLSTMModel();
-    LSTM_model.fit(input_for_LSTM[s], y_train[s], batch_size=40,validation_split=0.2, shuffle=True, epochs=30, verbose=1)
+    LSTM_model.fit(input_for_LSTM, y_train, batch_size=40,validation_split=0.2, shuffle=True, epochs=30, verbose=1)
     LSTM_model.save('lstmModel.h5')
 
 
