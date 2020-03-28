@@ -56,6 +56,7 @@ def train_model_CNN_LSTM(files_original,files_fake):
 
     CNN_model = getCNNInceptionModel(height,width,3)
     input_for_LSTM = CNN_model.predict(x_train);
+    input_for_LSTM = input_for_LSTM.reshape(len(files_original) + len(files_fake),40,2048)
     y_train = np.asarray(labels)
     s = np.arange(len(x_train));
     np.random.shuffle(s)
