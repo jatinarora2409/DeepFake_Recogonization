@@ -17,7 +17,7 @@ def get_all_files(folder):
     filepaths = [os.path.join(folder, f) for f in os.listdir(folder)]
     return filepaths
 
-def get_faces(files_original,files_fake):
+def get_faces_local(files_original,files_fake):
     np.set_printoptions(threshold=sys.maxsize)
     tempFaces = []
     print(files_original)
@@ -46,7 +46,7 @@ def get_faces(files_original,files_fake):
 
 
 def train_model_CNN_LSTM(files_original,files_fake):
-    x_train,count_incorrect,count_correct = get_faces(files_original,files_fake)
+    x_train,count_incorrect,count_correct = get_faces_local(files_original,files_fake)
     labels = []
     for i in range (0,(count_incorrect)):
         labels.append([0,1])
@@ -67,7 +67,7 @@ def train_model_CNN_LSTM(files_original,files_fake):
 
 
 def train_model_RNN(files_original,files_fake):
-    x_train,count_incorrect,count_correct = get_faces(files_original,files_fake)
+    x_train,count_incorrect,count_correct = get_faces_local(files_original,files_fake)
     labels = []
 
     for i in range (0,(count_incorrect)):
