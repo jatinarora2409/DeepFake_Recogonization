@@ -52,3 +52,8 @@ def getRNNModel(height,width,channels):
     adam = Adam(lr=0.0001)
     model.compile(optimizer=adam, loss='categorical_crossentropy', metrics=['accuracy'])
     return model
+
+
+def getCNNInceptionModel(height,width,channels):
+    base_model=applications.inception_v3(weights = "imagenet",include_top = False,input_shape=(height, width, channels))
+    return base_model
