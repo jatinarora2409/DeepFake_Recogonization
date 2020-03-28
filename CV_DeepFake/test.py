@@ -23,14 +23,14 @@ def get_faces_local(files_original,files_fake):
     print(files_original)
     print(files_fake)
     for original_file in files_original:
-        frames = get_frames(original_file, startingPoint=30,number_of_frames=40)
+        frames = get_frames(original_file, startingPoint=0,number_of_frames=40)
         tempFaces.extend(get_faces(frames, height=height, width=width))
         del frames
 
     facesCorrect = np.asarray(tempFaces);
     tempFaces = [];
     for fake_file in files_fake:
-        frames = get_frames(fake_file, number_of_frames=40,startingPoint=30)
+        frames = get_frames(fake_file, number_of_frames=40,startingPoint=0)
         tempFaces.extend(get_faces(frames, height=height, width=width))
         del frames
     facesIncorrect = np.asarray(tempFaces)
