@@ -1,6 +1,6 @@
 from keras.callbacks import ModelCheckpoint
 from keras.models import Sequential,Model
-from keras.layers import Dense,Convolution2D,Activation,MaxPooling2D,GlobalAveragePooling2D,Conv2D,Flatten,Dropout
+from keras.layers import Dense,Convolution2D,Activation,MaxPooling2D,GlobalAveragePooling2D,Conv2D,Flatten,Dropout,LSTM
 from keras import applications
 from keras.optimizers import SGD, Adam
 
@@ -57,3 +57,15 @@ def getRNNModel(height,width,channels):
 def getCNNInceptionModel(height,width,channels):
     base_model=applications.inception_v3.InceptionV3(weights = "imagenet",include_top = False,input_shape=(height, width, channels),pooling='max')
     return base_model
+
+def getLSTMModel():
+    model = Sequential()
+    model.add(LSTM(1, input_shape=(1, 2048),dropout=0.5,))
+    model.add(Dropout(0.5))
+    model.add(Dense(512))
+    x = model.output
+    predictions = Dense(2, activation='softmax')(x)
+    model = Model(inputs=model.input, outputs=predictions)
+    adam = Adam(lr=0.00001)
+    model.compile(optimizer=adam, loss='categorical_crossentropy', metrics=['accuracy'])
+    return model

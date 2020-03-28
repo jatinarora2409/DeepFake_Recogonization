@@ -1,5 +1,5 @@
 from face_detect_util.get_face import get_frames, get_faces,get_cropped_images
-from CNN.model import get_CNN_Model, get_CNN_Model_ForClassification,getRNNModel,getCNNInceptionModel
+from CNN.model import get_CNN_Model, get_CNN_Model_ForClassification,getRNNModel,getCNNInceptionModel,getLSTMModel
 import numpy as np
 import sys
 from keras.models import load_model,Model
@@ -10,21 +10,21 @@ from os.path import isfile, join
 framesFromFile1 = 500
 framesFromFile2 = 500
 
-height = 200
-width = 200
+height = 299
+width = 299
 
 def get_all_files(folder):
     filepaths = [os.path.join(folder, f) for f in os.listdir(folder)]
     return filepaths
 
-def train_model(files_original,files_fake):
+def get_faces(files_original,files_fake):
     np.set_printoptions(threshold=sys.maxsize)
     tempFaces = []
-    print( files_original)
+    print(files_original)
     print(files_fake)
     for original_file in files_original:
-        frames = get_frames(original_file, framesFromFile1, startingPoint=0)
-        tempFaces.extend(get_faces(frames,height=height,width=width))
+        frames = get_frames(original_file, framesFromFile1, startingPoint=30,number_of_frames=40)
+        tempFaces.extend(get_faces(frames, height=height, width=width))
         del frames
 
     facesCorrect = np.asarray(tempFaces);
@@ -41,8 +41,33 @@ def train_model(files_original,files_fake):
     print(count_incorrect)
     print("\n\n count_correct")
     print(count_correct)
-
     x_train = np.concatenate((facesIncorrect, facesCorrect))
+    return x_train,count_incorrect,count_correct
+
+
+def train_model_CNN_LSTM(files_original,files_fake):
+    x_train,count_incorrect,count_correct = get_faces(files_original,files_fake)
+    labels = []
+    for i in range (0,(count_incorrect)):
+        labels.append([0,1])
+
+    for i in range(0, (count_correct)):
+        labels.append([1,0])
+
+    CNN_model = getCNNInceptionModel(height,width,3)
+    input_for_LSTM = CNN_model.predict(x_train);
+    y_train = np.asarray(labels)
+    s = np.arange(len(x_train));
+    np.random.shuffle(s)
+    LSTM_model = getLSTMModel();
+    LSTM_model.fit(input_for_LSTM[s], y_train[s], validation_split=0.2, shuffle=True, epochs=30, batch_size=20, verbose=1)
+    LSTM_model.save('lstmModel.h5')
+
+
+
+
+def train_model_RNN(files_original,files_fake):
+    x_train,count_incorrect,count_correct = get_faces(files_original,files_fake)
     labels = []
 
     for i in range (0,(count_incorrect)):
@@ -116,9 +141,9 @@ def test_model(files):
     # y_test_result = model.predict(X_test)
     # print("result:", y_test_result)
 
-#files_fake = get_all_files('../manipulated_sequences/Deepfakes/raw/videos/')
-#files_original = get_all_files('../original_sequences/youtube/raw/videos/')
-#train_model(files_original,files_fake)
+files_fake = get_all_files('../manipulated_sequences/Deepfakes/raw/videos/')
+files_original = get_all_files('../original_sequences/youtube/raw/videos/')
+train_model_RNN(files_original,files_fake)
 
 #test_files = get_all_files('../test_files/')
 #test_model(test_files)
