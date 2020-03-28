@@ -53,6 +53,8 @@ def get_faces(frames,height=-1,width=-1):
 
             face_image = frames[i][top:bottom, left:right]
             face_images.append(face_image)
+            ## TODO: Limiting to one face per video
+            break;
     return face_images
 
 
