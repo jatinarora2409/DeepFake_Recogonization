@@ -126,7 +126,10 @@ def test_model(files):
 def check_output(file):
     img = cv2.imread(file)
     model = getCNNInceptionModel(img.shape[0],img.shape[1],img.shape[2])
-    output = model.predict([img])
+    input_predict = np.asarray([img]);
+    print("\n\n Input Predict Shape")
+    print(input_predict.shape);
+    output = model.predict(input_predict);
     print("\n\n SHAPE: ");
     print(output.shape);
     print("\n\n OUTPUT: ");
