@@ -63,7 +63,7 @@ def train_model_CNN_LSTM(files_original,files_fake):
 
 
     LSTM_model = getLSTMModel();
-    LSTM_model.fit(input_for_LSTM, y_train, batch_size=40,validation_split=0.2, shuffle=True, epochs=30, verbose=1)
+    LSTM_model.fit(input_for_LSTM, y_train,validation_split=0.2, shuffle=True, epochs=30, verbose=1)
     LSTM_model.save('lstmModel.h5')
 
 
