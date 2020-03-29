@@ -67,6 +67,22 @@ def train_model_CNN_LSTM(files_original,files_fake):
     LSTM_model.save('lstmModel.h5')
 
 
+def test_model_CNN_RNN(files):
+    model = load_model('lstmModel.h5')
+    CNN_model = getCNNInceptionModel(height, width, 3)
+    for file in files:
+        tempFaces = []
+        frames = get_frames(file, number_of_frames=40, startingPoint=0)
+        tempFaces.extend(get_faces(frames, height=height, width=width))
+        testFaces = np.asarray(tempFaces)
+        input_for_LSTM = CNN_model.predict(testFaces);
+        input_for_LSTM = input_for_LSTM.reshape(1, 40, 2048)
+        y_test_result = model.predict(input_for_LSTM)
+        print("\n\n")
+        print("File: "+str(file))
+        print("Result: "+y_test_result)
+        print("\n")
+
 
 
 def train_model_RNN(files_original,files_fake):
@@ -148,10 +164,10 @@ files_fake = get_all_files('../manipulated_sequences/Deepfakes/raw/videos/')
 files_original = get_all_files('../original_sequences/youtube/raw/videos/')
 file_original = ['../original.mp4']
 file_fake = ['../deepfake.mp4']
-train_model_CNN_LSTM(files_original,files_fake)
+#train_model_CNN_LSTM(files_original,files_fake)
 
-#test_files = get_all_files('../test_files/')
-#test_model(test_files)
+test_files = get_all_files('../test_files/')
+test_model_CNN_RNN(test_files)
 
 def check_output(file):
     img = cv2.imread(file)
