@@ -80,7 +80,8 @@ def test_model_CNN_RNN(files):
         y_test_result = model.predict(input_for_LSTM)
         print("\n\n")
         print("File: "+str(file))
-        print("Result: "+y_test_result)
+        print("Result: ")
+        print(y_test_result)
         print("\n")
 
 
