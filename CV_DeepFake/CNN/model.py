@@ -58,9 +58,9 @@ def getCNNInceptionModel(height,width,channels):
     base_model=applications.inception_v3.InceptionV3(weights = "imagenet",include_top = False,input_shape=(height, width, channels),pooling='max')
     return base_model
 
-def getLSTMModel(total_files):
+def getLSTMModel():
     model = Sequential()
-    model.add(LSTM(1, batch_input_shape=(total_files,40,2048),dropout=0.5,))
+    model.add(LSTM(1, batch_input_shape=(40,2048),dropout=0.5,))
     model.add(Dropout(0.5))
     model.add(Dense(512))
     x = model.output
