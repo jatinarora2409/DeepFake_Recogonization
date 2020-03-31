@@ -113,7 +113,11 @@ def test_model(files):
         frames = get_frames(file, number_of_frames=40, startingPoint=0)
         tempFaces = (get_faces(frames,height=height,width=width))
         testFaces = np.asarray(tempFaces)
+<<<<<<< HEAD
         testFaces = np.concatenate(testFaces)
+=======
+        print(testFaces.shape)
+>>>>>>> d726bf9a1ae6febe074d586c35c5382ec23eca93
         y_test_result = model.predict(testFaces)
         count_fake = 0
         count_positive = 0
