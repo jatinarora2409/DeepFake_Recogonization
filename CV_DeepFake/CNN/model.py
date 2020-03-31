@@ -54,6 +54,8 @@ def getRNNModel(height,width,channels):
     return model
 
 
+
+
 def getCNNInceptionModel(height,width,channels):
     base_model=applications.inception_v3.InceptionV3(weights = "imagenet",include_top = False,input_shape=(height, width, channels),pooling='max')
     return base_model

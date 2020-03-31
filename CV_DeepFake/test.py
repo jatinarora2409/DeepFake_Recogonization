@@ -101,7 +101,7 @@ def train_model_RNN(files_original,files_fake):
     s = np.arange(len(x_train));
     np.random.shuffle(s)
 
-    model = getRNNModel(height,width,3)
+    model = get_CNN_Model(height,width,3)
     epochs = 20;
     print(y_train)
     model.fit(x_train[s], y_train[s], validation_split=0.2, shuffle=True, epochs=epochs, batch_size=20, verbose=1)
@@ -165,10 +165,9 @@ files_fake = get_all_files('../manipulated_sequences/Deepfakes/raw/videos/')
 files_original = get_all_files('../original_sequences/youtube/raw/videos/')
 file_original = ['../original.mp4']
 file_fake = ['../deepfake.mp4']
-#train_model_CNN_LSTM(files_original,files_fake)
-
+train_model_RNN(files_original,files_fake)
 test_files = get_all_files('../test_files/')
-test_model_CNN_RNN(test_files)
+test_model(test_files)
 
 def check_output(file):
     img = cv2.imread(file)
