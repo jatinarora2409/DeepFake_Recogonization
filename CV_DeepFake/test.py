@@ -17,7 +17,7 @@ def get_all_files(folder):
     filepaths = [os.path.join(folder, f) for f in os.listdir(folder)]
     return filepaths
 
-def get_faces_local(files_original,files_fake):
+def get_faces_local(files_original):
     np.set_printoptions(threshold=sys.maxsize)
     tempFaces = []
     print(files_original)
@@ -36,7 +36,6 @@ def get_faces_local(files_original,files_fake):
         print("TempFaces Size: " + str(len(tempFaces)))
         del frames
     facesIncorrect = np.asarray(tempFaces)
-
     count_incorrect = len(facesIncorrect)
     count_correct = len(facesCorrect)
     print("count_incorrect")
@@ -111,10 +110,10 @@ def train_model_RNN(files_original,files_fake):
 def test_model(files):
     model = load_model('classification.h5')
     for file in files:
-        tempFaces = []
-        frames = get_frames(file, number_of_frames=-1, startingPoint=0)
-        tempFaces.extend(get_faces(frames,height=height,width=width))
+        frames = get_frames(file, number_of_frames=40, startingPoint=0)
+        tempFaces = (get_faces(frames,height=height,width=width))
         testFaces = np.asarray(tempFaces)
+        testFaces = np.concatenate(testFaces)
         y_test_result = model.predict(testFaces)
         count_fake = 0
         count_positive = 0
@@ -165,7 +164,7 @@ files_fake = get_all_files('../manipulated_sequences/Deepfakes/raw/videos/')
 files_original = get_all_files('../original_sequences/youtube/raw/videos/')
 file_original = ['../original.mp4']
 file_fake = ['../deepfake.mp4']
-train_model_RNN(files_original,files_fake)
+#train_model_RNN(files_original,files_fake)
 test_files = get_all_files('../test_files/')
 test_model(test_files)
 
