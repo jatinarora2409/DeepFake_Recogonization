@@ -17,7 +17,7 @@ def get_all_files(folder):
     filepaths = [os.path.join(folder, f) for f in os.listdir(folder)]
     return filepaths
 
-def get_faces_local(files_original):
+def get_faces_local(files_original,files_fake):
     np.set_printoptions(threshold=sys.maxsize)
     tempFaces = []
     print(files_original)
