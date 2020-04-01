@@ -104,11 +104,11 @@ def train_model_RNN(files_original,files_fake):
     epochs = 20;
     print(y_train)
     model.fit(x_train[s], y_train[s], validation_split=0.2, shuffle=True, epochs=epochs, batch_size=20, verbose=1)
-    model.save('classification.h5')
+    model.save('classification_RNN.h5')
 
 
 def test_model(files):
-    model = load_model('classification.h5')
+    model = load_model('classification_RNN.h5')
     for file in files:
         frames = get_frames(file, number_of_frames=40, startingPoint=0)
         tempFaces = (get_faces(frames,height=height,width=width))
