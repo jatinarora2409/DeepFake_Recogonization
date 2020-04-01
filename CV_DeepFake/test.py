@@ -100,7 +100,7 @@ def train_model_RNN(files_original,files_fake):
     s = np.arange(len(x_train));
     np.random.shuffle(s)
 
-    model = get_CNN_Model_ForClassification(height,width)
+    model = getRNNModel(height,width,3)
     epochs = 20;
     print(y_train)
     model.fit(x_train[s], y_train[s], validation_split=0.2, shuffle=True, epochs=epochs, batch_size=20, verbose=1)
