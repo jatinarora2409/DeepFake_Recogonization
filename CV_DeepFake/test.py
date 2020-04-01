@@ -166,7 +166,7 @@ files_fake = get_all_files('../manipulated_sequences/Deepfakes/raw/videos/')
 files_original = get_all_files('../original_sequences/youtube/raw/videos/')
 file_original = ['../original.mp4']
 file_fake = ['../deepfake.mp4']
-#train_model_RNN(files_original,files_fake)
+train_model_RNN(files_original,files_fake)
 test_files = get_all_files('../test_files/')
 test_model(test_files)
 
