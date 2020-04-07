@@ -62,7 +62,7 @@ def getCNNInceptionModel(height,width,channels):
 
 def getLSTMModel():
     model = Sequential()
-    model.add(LSTM(1, input_shape=(40,2048), dropout=0.5,))
+    model.add(LSTM(16, input_shape=(40,2048), dropout=0.5,))
     model.add(Dropout(0.5))
     model.add(Dense(512))
     x = model.output
