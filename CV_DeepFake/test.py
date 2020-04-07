@@ -22,10 +22,14 @@ def get_faces_local(files_original,files_fake):
     tempFaces = []
     print(files_original)
     print(files_fake)
+
+    labels = []
+
     for original_file in files_original:
         frames = get_frames(original_file, startingPoint=0,number_of_frames=40)
         tempFaces.extend(get_faces(frames, height=height, width=width))
         print("TempFaces Size: " +str(len(tempFaces)))
+        labels.append([0, 1])
         del frames
 
     facesCorrect = np.asarray(tempFaces);
@@ -34,6 +38,7 @@ def get_faces_local(files_original,files_fake):
         frames = get_frames(fake_file, number_of_frames=40,startingPoint=0)
         tempFaces.extend(get_faces(frames, height=height, width=width))
         print("TempFaces Size: " + str(len(tempFaces)))
+        labels.append([1, 0])
         del frames
     facesIncorrect = np.asarray(tempFaces)
     count_incorrect = len(facesIncorrect)
@@ -43,26 +48,42 @@ def get_faces_local(files_original,files_fake):
     print("\n\n count_correct")
     print(count_correct)
     x_train = np.concatenate((facesIncorrect, facesCorrect))
-    return x_train,count_incorrect,count_correct
+    return x_train,count_incorrect,count_correct,labels
+
 
 
 def train_model_CNN_LSTM(files_original,files_fake):
-    x_train,count_incorrect,count_correct = get_faces_local(files_original,files_fake)
-    labels = []
-    for i in range (0,len(files_fake)):
-        labels.append([0,1])
+    original_file_iter = iter(files_original)
+    files_fake_iter = iter(files_fake)
+    original_file = next(original_file_iter,None)
+    fake_file = next(files_fake_iter,None)
 
-    for i in range(0,len (files_original)):
-        labels.append([1,0])
-
-    CNN_model = getCNNInceptionModel(height,width,3)
-    input_for_LSTM = CNN_model.predict(x_train);
-    input_for_LSTM = input_for_LSTM.reshape(len(files_original) + len(files_fake),40,2048)
-    y_train = np.asarray(labels)
-
-
+    count = 0;
+    original_file_array = []
+    fake_file_array=[]
+    CNN_model = getCNNInceptionModel(height, width, 3)
     LSTM_model = getLSTMModel();
-    LSTM_model.fit(input_for_LSTM, y_train,validation_split=0.2, shuffle=True, epochs=30, verbose=1)
+
+    while original_file is not None or fake_file is not None :
+        if original_file is not None:
+            original_file_array.append(original_file)
+        if fake_file is not None:
+            fake_file_array.append(fake_file)
+        count = count + 1
+        original_file = next(original_file_iter, None)
+        fake_file = next(files_fake_iter, None)
+        if(count==5):
+            x_train,count_incorrect,count_correct,labels = get_faces_local(original_file_array,fake_file_array)
+            print("Shape of X_train: " + str(x_train.shape))
+            print("Shape of X_train, single frame " + str(x_train[0].shape))
+            input_for_LSTM = CNN_model.predict(x_train);
+            print("Shape of input_for_LSTM before reshape"+str(input_for_LSTM.shape))
+            input_for_LSTM = input_for_LSTM.reshape(len(files_original) + len(files_fake),40,2048)
+            print("Shape of input_for_LSTM after reshape"+str(input_for_LSTM.shape))
+            y_train = np.asarray(labels)
+            LSTM_model.fit(input_for_LSTM, y_train,validation_split=0.2, shuffle=True, epochs=30, verbose=1)
+            count = 0
+
     LSTM_model.save('lstmModel.h5')
 
 
