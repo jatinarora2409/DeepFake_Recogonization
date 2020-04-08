@@ -74,7 +74,7 @@ def train_model_CNN_LSTM(files_original,files_fake):
         fake_file = next(files_fake_iter, None)
         if(count==5):
             x_train,count_incorrect,count_correct,labels = get_faces_local(original_file_array,fake_file_array)
-            np.stack(x_train, axis=0)
+            x_train = np.array(x_train)
             print("Shape of X_train: " + str(x_train.shape))
             print("Shape of X_train, single frame " + str(x_train[0].shape))
             input_for_LSTM = CNN_model.predict(x_train);
