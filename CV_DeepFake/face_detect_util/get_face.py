@@ -55,10 +55,14 @@ def get_faces(frames,height=-1,width=-1):
             face_image = frames[i][top:bottom, left:right]
             face_image = np.array(face_image)
            ##################
+
+            print("top: "+str(top) + " bottom: "+str(bottom) + " left: "+str(left)+" right "+str(right))
+
             if(bottom-top<height):
                 np.pad(face_image,((0,height-(bottom-top)),(0,0)),'constant')
             if(right-left<height):
                 np.pad(face_image,((0,0),(0,width-(right-left))),'constant')
+
             ####################
             print("Face_image_size: "+str(face_image.shape))
             face_images.append(face_image)
