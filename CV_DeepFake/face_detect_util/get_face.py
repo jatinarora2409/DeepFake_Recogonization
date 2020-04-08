@@ -53,6 +53,8 @@ def get_faces(frames,height=-1,width=-1):
                 right = right - math.floor(diff / 2)
 
             face_image = frames[i][top:bottom, left:right]
+            face_image = np.array(face_image)
+            print("Face_image_size: "+str(face_image.shape))
             face_images.append(face_image)
             ## TODO: Limiting to one face per video
             break;
