@@ -28,6 +28,7 @@ def get_frames(video_path,number_of_frames=1,startingPoint=0):
 
 def get_faces(frames,height=-1,width=-1):
     face_images = []
+
     for i in range(0, len(frames)):
         face_locations = face_recognition.face_locations(frames[i])
         for face_location in face_locations:
@@ -51,6 +52,20 @@ def get_faces(frames,height=-1,width=-1):
                 diff = (right - left) - width
                 left = left + math.ceil(diff / 2)
                 right = right - math.floor(diff / 2)
+
+            max_width, max_height = frames[i].size
+            if(top<0):
+                bottom = bottom - top;
+                top = 0
+            if(bottom>=max_height):
+                top = top - (bottom-max_height+1)
+                bottom = max_height-1
+            if(left<0):
+                right = right - left
+                left = 0
+            if(right>max_width):
+                left = left-(right-max_width+1)
+                right = max_width-1
 
             face_image = frames[i][top:bottom, left:right]
             face_image = np.array(face_image)
