@@ -53,7 +53,7 @@ def get_faces(frames,height=-1,width=-1):
                 left = left + math.ceil(diff / 2)
                 right = right - math.floor(diff / 2)
 
-            max_width, max_height = frames[i].size
+            max_height, max_width  = frames[i].shape
             if(top<0):
                 bottom = bottom - top;
                 top = 0
