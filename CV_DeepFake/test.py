@@ -28,8 +28,10 @@ def get_faces_local(files_original,files_fake):
     for original_file in files_original:
         frames = get_frames(original_file, startingPoint=0,number_of_frames=40)
         faces = get_faces(frames, height=height, width=width)
+        print("Faces Size: "+str(len(faces)))
         tempFaces.extend(faces)
-       # print("TempFaces Size: " +str(tempFaces.shape))
+        print("TempFaces Size: " +str(len(tempFaces)))
+
         labels.append([0, 1])
         del frames
 
