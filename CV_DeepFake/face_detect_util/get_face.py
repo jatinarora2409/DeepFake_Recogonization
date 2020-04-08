@@ -4,6 +4,7 @@ import face_recognition
 import math
 
 import matplotlib.pylab as plt
+import numpy as np
 
 def get_frames(video_path,number_of_frames=1,startingPoint=0):
     cap = cv.VideoCapture(video_path)
@@ -55,7 +56,7 @@ def get_faces(frames,height=-1,width=-1):
             face_images.append(face_image)
             ## TODO: Limiting to one face per video
             break;
-    return face_images
+    return np.asarray(face_images)
 
 
 def get_cropped_images(frames,height,width):

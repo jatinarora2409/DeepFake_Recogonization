@@ -27,8 +27,9 @@ def get_faces_local(files_original,files_fake):
 
     for original_file in files_original:
         frames = get_frames(original_file, startingPoint=0,number_of_frames=40)
-        tempFaces.extend(get_faces(frames, height=height, width=width))
-        print("TempFaces Size: " +str(len(tempFaces)))
+        faces = get_faces(frames, height=height, width=width)
+        tempFaces.extend(faces)
+       # print("TempFaces Size: " +str(tempFaces.shape))
         labels.append([0, 1])
         del frames
 
@@ -37,16 +38,13 @@ def get_faces_local(files_original,files_fake):
     for fake_file in files_fake:
         frames = get_frames(fake_file, number_of_frames=40,startingPoint=0)
         tempFaces.extend(get_faces(frames, height=height, width=width))
-        print("TempFaces Size: " + str(len(tempFaces)))
+        #print("TempFaces Size: " + str(tempFaces.shape))
         labels.append([1, 0])
         del frames
     facesIncorrect = np.asarray(tempFaces)
     count_incorrect = len(facesIncorrect)
     count_correct = len(facesCorrect)
-    print("count_incorrect")
-    print(count_incorrect)
-    print("\n\n count_correct")
-    print(count_correct)
+    print(facesIncorrect.shape)
     x_train = np.concatenate((facesIncorrect, facesCorrect))
     return x_train,count_incorrect,count_correct,labels
 
