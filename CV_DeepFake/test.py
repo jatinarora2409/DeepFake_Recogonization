@@ -78,7 +78,7 @@ def train_model_CNN_LSTM(files_original,files_fake):
             print("Shape of X_train, single frame " + str(x_train[0].shape))
             input_for_LSTM = CNN_model.predict(x_train);
             print("Shape of input_for_LSTM before reshape"+str(input_for_LSTM.shape))
-            input_for_LSTM = input_for_LSTM.reshape(len(files_original) + len(files_fake),40,2048)
+            input_for_LSTM = input_for_LSTM.reshape(len(fake_file_array) + len(original_file_array),40,2048)
             print("Shape of input_for_LSTM after reshape"+str(input_for_LSTM.shape))
             y_train = np.asarray(labels)
             LSTM_model.fit(input_for_LSTM, y_train,validation_split=0.2, shuffle=True, epochs=30, verbose=1)
