@@ -6,7 +6,7 @@ import math
 import matplotlib.pylab as plt
 import numpy as np
 
-def get_frames(video_path,number_of_frames=1,startingPoint=0):
+def get_frames(video_path,number_of_frames=-1,startingPoint=0):
     cap = cv.VideoCapture(video_path)
     cap.set(1,startingPoint)
     images=[]
@@ -26,10 +26,13 @@ def get_frames(video_path,number_of_frames=1,startingPoint=0):
     cap.release()
     return images
 
-def get_faces(frames,height=-1,width=-1):
+def get_faces(frames,height=-1,width=-1,number_of_faces=-1):
     face_images = []
+    collected_faces = 0
 
     for i in range(0, len(frames)):
+        if(collected_faces==number_of_faces):
+            break;
         face_locations = face_recognition.face_locations(frames[i])
         for face_location in face_locations:
             top, right, bottom, left = face_location
@@ -83,6 +86,7 @@ def get_faces(frames,height=-1,width=-1):
             ####################
            # print("Face_image_size: "+str(face_image.shape))
             face_images.append(face_image)
+            collected_faces = collected_faces+1;
             ## TODO: Limiting to one face per video
             break;
     return np.asarray(face_images)
