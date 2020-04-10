@@ -90,9 +90,8 @@ def get_faces(frames,height=-1,width=-1,number_of_faces=-1):
             collected_faces = collected_faces+1;
             ## TODO: Limiting to one face per video
             break;
-        face_images = np.asarray(face_images)
-        print("Addded These many faces ",face_images.shape)
-    return face_images
+    print("Addded These many faces ", len(face_images))
+    return np.asarray(face_images)
 
 
 def get_cropped_images(frames,height,width):
