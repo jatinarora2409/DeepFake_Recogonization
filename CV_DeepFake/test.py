@@ -30,21 +30,23 @@ def get_faces_local(files_original,files_fake):
     for original_file in files_original:
         frames = get_frames(original_file, startingPoint=0)
         faces = get_faces(frames, height=height, width=width,number_of_faces=number_of_faces)
-        #print("Faces Size: "+str(len(faces)))
-        tempFaces.extend(faces)
-        #print("TempFaces Size: " +str(len(tempFaces)))
-
-        labels.append([0, 1])
+        if(len(faces)==number_of_faces):
+           tempFaces.extend(faces)
+           labels.append([0, 1])
         del frames
+        del faces
 
     facesCorrect = np.asarray(tempFaces);
     tempFaces = [];
     for fake_file in files_fake:
         frames = get_frames(fake_file,startingPoint=0)
-        tempFaces.extend(get_faces(frames, height=height, width=width,number_of_faces=number_of_faces))
-        #print("TempFaces Size: " + str(tempFaces.shape))
-        labels.append([1, 0])
+        faces = get_faces(frames, height=height, width=width, number_of_faces=number_of_faces)
+        if (len(faces) == number_of_faces):
+            tempFaces.extend(faces)
+            labels.append([1, 0])
         del frames
+        del faces
+
     facesIncorrect = np.asarray(tempFaces)
     count_incorrect = len(facesIncorrect)
     count_correct = len(facesCorrect)
@@ -81,7 +83,7 @@ def train_model_CNN_LSTM(files_original,files_fake):
             print("Shape of X_train, single frame " + str(x_train[0].shape))
             input_for_LSTM = CNN_model.predict(x_train);
             print("Shape of input_for_LSTM before reshape"+str(input_for_LSTM.shape))
-            input_for_LSTM = input_for_LSTM.reshape(len(fake_file_array) + len(original_file_array),number_of_faces,2048)
+            input_for_LSTM = input_for_LSTM.reshape(len(labels),number_of_faces,2048)
             print("Shape of input_for_LSTM after reshape"+str(input_for_LSTM.shape))
             y_train = np.asarray(labels)
             LSTM_model.fit(input_for_LSTM, y_train,validation_split=0.2, shuffle=True, epochs=30, verbose=1)
