@@ -24,6 +24,7 @@ def get_frames(video_path,number_of_frames=-1,startingPoint=0):
         # ax.imshow(image)
         # plt.show()
     cap.release()
+    print(" From Video File " + str(video_path) )
     return images
 
 def get_faces(frames,height=-1,width=-1,number_of_faces=-1):
@@ -89,7 +90,9 @@ def get_faces(frames,height=-1,width=-1,number_of_faces=-1):
             collected_faces = collected_faces+1;
             ## TODO: Limiting to one face per video
             break;
-    return np.asarray(face_images)
+        face_images = np.asarray(face_images)
+        print("Addded These many faces ",face_images.shape)
+    return face_images
 
 
 def get_cropped_images(frames,height,width):
