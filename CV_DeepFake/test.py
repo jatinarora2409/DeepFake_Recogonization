@@ -102,11 +102,15 @@ def test_model_CNN_RNN(files):
     CNN_model = getCNNInceptionModel(height, width, 3)
     for file in files:
         tempFaces = []
-        frames = get_frames(file, number_of_frames=40, startingPoint=0)
-        tempFaces.extend(get_faces(frames, height=height, width=width))
+        frames = get_frames(file, number_of_frames=-1, startingPoint=0)
+        tempFaces.extend(get_faces(frames, height=height, width=width,number_of_faces=80))
+        if(len(tempFaces)!=number_of_faces):
+            print("File: " + str(file))
+            print("No Result Found\n")
+            continue;
         testFaces = np.asarray(tempFaces)
         input_for_LSTM = CNN_model.predict(testFaces);
-        input_for_LSTM = input_for_LSTM.reshape(1, 40, 2048)
+        input_for_LSTM = input_for_LSTM.reshape(1, number_of_faces, 2048)
         y_test_result = model.predict(input_for_LSTM)
         print("\n\n")
         print("File: "+str(file))
