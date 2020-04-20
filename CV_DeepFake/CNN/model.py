@@ -1,6 +1,7 @@
 from keras.callbacks import ModelCheckpoint
 from keras.models import Sequential,Model
-from keras.layers import Dense,Convolution2D,Activation,MaxPooling2D,GlobalAveragePooling2D,Conv2D,Flatten,Dropout,LSTM
+from keras.layers import Dense, Convolution2D, Activation, MaxPooling2D, GlobalAveragePooling2D, Conv2D, Flatten, \
+    Dropout, LSTM, TimeDistributed
 from keras import applications
 from keras.optimizers import SGD, Adam
 
@@ -62,6 +63,35 @@ def getLSTMModel():
     model.add(LSTM(16, input_shape=(80,2048), dropout=0.5,))
     model.add(Dropout(0.5))
     model.add(Dense(512))
+    x = model.output
+    predictions = Dense(2, activation='softmax')(x)
+    model = Model(inputs=model.input, outputs=predictions)
+    adam = Adam(lr=0.00001)
+    model.compile(optimizer=adam, loss='categorical_crossentropy', metrics=['accuracy'])
+    return model
+
+
+def getCustomCNNLSTMModel(batch_size,height,width,channels):
+    model = Sequential()
+    model.add(TimeDistributed(Convolution2D(24, (5, 5), border_mode="same", init='he_normal',)
+                              ,input_shape=(batch_size,height, width, channels)))
+    model.add(TimeDistributed(Activation("relu")))
+    model.add(TimeDistributed(MaxPooling2D(pool_size=(2, 2), strides=(2, 2), border_mode="valid")))
+    model.add(TimeDistributed(Convolution2D(36, (5, 5))))
+    model.add(TimeDistributed(Activation("relu")))
+    model.add(TimeDistributed(MaxPooling2D(pool_size=(2, 2), strides=(2, 2), border_mode="valid")))
+    model.add(TimeDistributed(Convolution2D(48, (5, 5))))
+    model.add(TimeDistributed(Activation("relu")))
+    model.add(TimeDistributed(MaxPooling2D(pool_size=(2, 2), strides=(2, 2), border_mode="valid")))
+    model.add(TimeDistributed(Convolution2D(64, (3, 3))))
+    model.add(TimeDistributed(Activation("relu")))
+    model.add(TimeDistributed(MaxPooling2D(pool_size=(2, 2), strides=(2, 2), border_mode="valid")))
+    model.add(TimeDistributed(Convolution2D(64, (3, 3))))
+    model.add(TimeDistributed(Activation("relu")))
+    model.add(TimeDistributed(Flatten()))
+    model.add(LSTM(1024,activation='relu',dropout=0.5))
+    model.add(Dense(1024),activation='relu')
+    model.add(Dropout(0.5))
     x = model.output
     predictions = Dense(2, activation='softmax')(x)
     model = Model(inputs=model.input, outputs=predictions)

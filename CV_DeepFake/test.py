@@ -1,5 +1,5 @@
 from face_detect_util.get_face import get_frames, get_faces,get_cropped_images
-from CNN.model import get_CNN_Model, get_CNN_Model_ForClassification,getRNNModel,getCNNInceptionModel,getLSTMModel
+from CNN.model import get_CNN_Model, get_CNN_Model_ForClassification,getRNNModel,getCNNInceptionModel,getLSTMModel,getCustomCNNLSTMModel
 import numpy as np
 import sys
 from keras.models import load_model,Model
@@ -65,9 +65,9 @@ def train_model_CNN_LSTM(files_original,files_fake):
     count = 0;
     original_file_array = []
     fake_file_array=[]
-    CNN_model = getCNNInceptionModel(height, width, 3)
-    LSTM_model = getLSTMModel();
-
+    #CNN_model = getCNNInceptionModel(height, width, 3)
+    #LSTM_model = getLSTMModel();
+    CNN_LSTM_model = getCustomCNNLSTMModel(number_of_faces,height,width,3)
     while original_file is not None or fake_file is not None :
         if original_file is not None:
             original_file_array.append(original_file)
@@ -81,24 +81,24 @@ def train_model_CNN_LSTM(files_original,files_fake):
             x_train = np.array(x_train)
             print("Shape of X_train: " + str(x_train.shape))
             print("Shape of X_train, single frame " + str(x_train[0].shape))
-            input_for_LSTM = CNN_model.predict(x_train);
-            print("Shape of input_for_LSTM before reshape"+str(input_for_LSTM.shape))
-            input_for_LSTM = input_for_LSTM.reshape(len(labels),number_of_faces,2048)
-            print("Shape of input_for_LSTM after reshape"+str(input_for_LSTM.shape))
+            #input_for_LSTM = CNN_model.predict(x_train);
+            #print("Shape of input_for_LSTM before reshape"+str(input_for_LSTM.shape))
+            #input_for_LSTM = input_for_LSTM.reshape(len(labels),number_of_faces,2048)
+            #print("Shape of input_for_LSTM after reshape"+str(input_for_LSTM.shape))
             y_train = np.asarray(labels)
-            LSTM_model.fit(input_for_LSTM, y_train,validation_split=0.2, shuffle=True, epochs=30, verbose=1)
+            CNN_LSTM_model.fit(x_train, y_train,validation_split=0.2, shuffle=True, epochs=30, verbose=1)
             count = 0
             original_file_array = []
             fake_file_array = []
             del x_train
-            del input_for_LSTM
+            #del input_for_LSTM
             del labels
 
-    LSTM_model.save('lstmModel.h5')
+    CNN_LSTM_model.save('CNN_lstmModel.h5')
 
 
 def test_model_CNN_RNN(files):
-    model = load_model('lstmModel.h5')
+    model = load_model('CNN_lstmModel.h5')
     CNN_model = getCNNInceptionModel(height, width, 3)
     for file in files:
         tempFaces = []
