@@ -105,7 +105,7 @@ def test_model_CNN_RNN(files):
         print("File")
         frames = get_frames(file, number_of_frames=-1, startingPoint=0)
         faces = get_faces(frames, height=height, width=width,number_of_faces=number_of_faces)
-        if(len(tempFaces)!=number_of_faces):
+        if(len(faces)!=number_of_faces):
             print("File: " + str(file))
             print("No Result Found\n")
             continue;
