@@ -99,7 +99,6 @@ def train_model_CNN_LSTM(files_original,files_fake):
 
 def test_model_CNN_RNN(files):
     model = load_model('CNN_lstmModel.h5')
-    CNN_model = getCNNInceptionModel(height, width, 3)
     for file in files:
         tempFaces = []
         frames = get_frames(file, number_of_frames=-1, startingPoint=0)
@@ -109,7 +108,7 @@ def test_model_CNN_RNN(files):
             print("No Result Found\n")
             continue;
         testFaces = np.asarray(tempFaces)
-        input_for_LSTM = CNN_model.predict(testFaces);
+        input_for_LSTM = model.predict(testFaces);
         input_for_LSTM = input_for_LSTM.reshape(1, number_of_faces, 2048)
         y_test_result = model.predict(input_for_LSTM)
         print("\n\n")
