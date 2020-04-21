@@ -13,7 +13,7 @@ framesFromFile2 = 500
 height = 299
 width = 299
 
-number_of_faces = 80
+number_of_faces = 40
 
 def get_all_files(folder):
     filepaths = [os.path.join(folder, f) for f in os.listdir(folder)]
@@ -76,7 +76,7 @@ def train_model_CNN_LSTM(files_original,files_fake):
         count = count + 1
         original_file = next(original_file_iter, None)
         fake_file = next(files_fake_iter, None)
-        if(count==2):
+        if(count==3):
             x_train,count_incorrect,count_correct,labels = get_faces_local(original_file_array,fake_file_array)
             x_train = np.array(x_train)
             print("Shape of X_train: " + str(x_train.shape))
