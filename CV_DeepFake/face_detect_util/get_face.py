@@ -37,52 +37,54 @@ def get_faces(frames,height=-1,width=-1,number_of_faces=-1):
         face_locations = face_recognition.face_locations(frames[i])
         for face_location in face_locations:
             top, right, bottom, left = face_location
-
-            if (height!=-1 and (bottom-top) < height):
-                diff = height - (bottom-top)
-                top = top - math.ceil(diff/2)
-                bottom = bottom + math.floor(diff/2)
-            if (height != -1 and (bottom - top) > height):
-                diff = bottom-top-height
-                top = top + math.floor(diff/2)
-                bottom = bottom - math.ceil(diff/2)
-
-            if(width!=-1 and (right-left)<width):
-                diff = width -(right-left)
-                left = left - math.ceil(diff/2)
-                right = right+math.floor(diff/2)
-
-            if (width != -1 and (right-left) > width):
-                diff = (right - left) - width
-                left = left + math.ceil(diff / 2)
-                right = right - math.floor(diff / 2)
-
-            #print("Frame Limits:" + str(frames[i].shape))
-            max_height, max_width,channels  = (frames[i].shape)
-
-            if(top<0):
-                bottom = bottom - top;
-                top = 0
-            if(bottom>=max_height):
-                top = top - (bottom-max_height+1)
-                bottom = max_height-1
-            if(left<0):
-                right = right - left
-                left = 0
-            if(right>max_width):
-                left = left-(right-max_width+1)
-                right = max_width-1
-
             face_image = frames[i][top:bottom, left:right]
+            dsize = (width, height)
+            face_image = cv.resize(face_image,dsize)
+            # if (height!=-1 and (bottom-top) < height):
+            #     diff = height - (bottom-top)
+            #     top = top - math.ceil(diff/2)
+            #     bottom = bottom + math.floor(diff/2)
+            # if (height != -1 and (bottom - top) > height):
+            #     diff = bottom-top-height
+            #     top = top + math.floor(diff/2)
+            #     bottom = bottom - math.ceil(diff/2)
+            #
+            # if(width!=-1 and (right-left)<width):
+            #     diff = width -(right-left)
+            #     left = left - math.ceil(diff/2)
+            #     right = right+math.floor(diff/2)
+            #
+            # if (width != -1 and (right-left) > width):
+            #     diff = (right - left) - width
+            #     left = left + math.ceil(diff / 2)
+            #     right = right - math.floor(diff / 2)
+            #
+            # #print("Frame Limits:" + str(frames[i].shape))
+            # max_height, max_width,channels  = (frames[i].shape)
+            #
+            # if(top<0):
+            #     bottom = bottom - top;
+            #     top = 0
+            # if(bottom>=max_height):
+            #     top = top - (bottom-max_height+1)
+            #     bottom = max_height-1
+            # if(left<0):
+            #     right = right - left
+            #     left = 0
+            # if(right>max_width):
+            #     left = left-(right-max_width+1)
+            #     right = max_width-1
+            #
+            # face_image = frames[i][top:bottom, left:right]
             face_image = np.array(face_image)
            ##################
 
             #print("top: "+str(top) + " bottom: "+str(bottom) + " left: "+str(left)+" right "+str(right))
 
-            if(bottom-top<height):
-                np.pad(face_image,((0,height-(bottom-top)),(0,0)),'constant')
-            if(right-left<height):
-                np.pad(face_image,((0,0),(0,width-(right-left))),'constant')
+            # if(bottom-top<height):
+            #     np.pad(face_image,((0,height-(bottom-top)),(0,0)),'constant')
+            # if(right-left<height):
+            #     np.pad(face_image,((0,0),(0,width-(right-left))),'constant')
 
             ####################
            # print("Face_image_size: "+str(face_image.shape))
