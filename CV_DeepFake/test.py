@@ -100,8 +100,8 @@ def train_model_CNN_LSTM(files_original,files_fake):
 def test_model_CNN_RNN(files):
     model = load_model('CNN_lstmModel.h5')
     count = 0
+    tempFaces = []
     for file in files:
-        tempFaces = []
         print("File")
         frames = get_frames(file, number_of_frames=-1, startingPoint=0)
         faces = get_faces(frames, height=height, width=width,number_of_faces=number_of_faces)
