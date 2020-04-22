@@ -68,6 +68,8 @@ def train_model_CNN_LSTM(files_original,files_fake):
     #CNN_model = getCNNInceptionModel(height, width, 3)
     #LSTM_model = getLSTMModel();
     CNN_LSTM_model = getCustomCNNLSTMModel(number_of_faces,height,width,3)
+    file1 = open("MyFile.txt", "a")
+    file2 = open("MyFile2.txt","a")
     while original_file is not None or fake_file is not None :
         if original_file is not None:
             original_file_array.append(original_file)
@@ -82,9 +84,12 @@ def train_model_CNN_LSTM(files_original,files_fake):
             print("\n\n")
             print("Shape of X_train: " + str(x_train.shape))
             print("Shape of X_train, single frame " + str(x_train[0].shape))
+            file1.write(x_train[0])
+
             #input_for_LSTM = CNN_model.predict(x_train);
             #print("Shape of input_for_LSTM before reshape"+str(input_for_LSTM.shape))
             input_for_LSTM = x_train.reshape(len(labels),number_of_faces,height,width,3)
+            file2.write(input_for_LSTM[0][0])
             #print("Shape of input_for_LSTM after reshape"+str(input_for_LSTM.shape))
             y_train = np.asarray(labels)
             print("Training on labels")
