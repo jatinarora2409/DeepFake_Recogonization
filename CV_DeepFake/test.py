@@ -86,13 +86,13 @@ def train_model_CNN_LSTM(files_original,files_fake):
             print("Shape of X_train: " + str(x_train.shape))
             print("Shape of X_train, single frame " + str(x_train[0].shape))
             if(testing):
-                file1.write(x_train[0])
+                file1.write(str(x_train[0]))
 
             #input_for_LSTM = CNN_model.predict(x_train);
             #print("Shape of input_for_LSTM before reshape"+str(input_for_LSTM.shape))
             input_for_LSTM = x_train.reshape(len(labels),number_of_faces,height,width,3)
             if(testing):
-             file2.write(input_for_LSTM[0][0])
+             file2.write(str(input_for_LSTM[0][0]))
              file1.close()
              file2.close()
             testing=False
