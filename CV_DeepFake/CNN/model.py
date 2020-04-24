@@ -27,8 +27,8 @@ def get_CNN_Model(height,width):
     model.add(Dense(500, activation="relu"))
     model.add(Dense(90, activation="relu"))
     model.add(Dense(30,activation="sigmoid"))
-    model.add(Dense(1, activation='sigmoid'))
-    model.compile(optimizer='rmsprop', loss ='mse', metrics = ['accuracy'])
+    model.add(Dense(2, activation='softmax'))
+    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
     return model
 
 

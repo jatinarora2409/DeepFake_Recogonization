@@ -55,6 +55,44 @@ def get_faces_local(files_original,files_fake):
     return x_train,count_incorrect,count_correct,labels
 
 
+def get_faces_local_for_CNN(files_original,files_fake):
+    np.set_printoptions(threshold=sys.maxsize)
+    tempFaces = []
+    print(files_original)
+    print(files_fake)
+
+    labels = []
+
+    for original_file in files_original:
+        frames = get_frames(original_file, startingPoint=0)
+        faces = get_faces(frames, height=height, width=width,number_of_faces=number_of_faces)
+        if(len(faces)==number_of_faces):
+           tempFaces.extend(faces)
+           for face in faces:
+               labels.append([0, 1])
+
+        del frames
+        del faces
+
+    facesCorrect = np.asarray(tempFaces);
+    tempFaces = [];
+    for fake_file in files_fake:
+        frames = get_frames(fake_file,startingPoint=0)
+        faces = get_faces(frames, height=height, width=width, number_of_faces=number_of_faces)
+        if (len(faces) == number_of_faces):
+            tempFaces.extend(faces)
+            for face in faces:
+                labels.append([1, 0])
+        del frames
+        del faces
+
+    facesIncorrect = np.asarray(tempFaces)
+    count_incorrect = len(facesIncorrect)
+    count_correct = len(facesCorrect)
+    print(facesIncorrect.shape)
+    x_train = np.concatenate((facesCorrect, facesIncorrect))
+    return x_train,count_incorrect,count_correct,labels
+
 
 def train_model_CNN_LSTM(files_original,files_fake):
     original_file_iter = iter(files_original)
@@ -142,7 +180,7 @@ def test_model_CNN_RNN(files):
 
 
 
-def train_model_RNN(files_original,files_fake):
+def train_model_RNN_or_CNN(files_original,files_fake):
     x_train,count_incorrect,count_correct = get_faces_local(files_original,files_fake)
     labels = []
 
@@ -157,11 +195,10 @@ def train_model_RNN(files_original,files_fake):
     s = np.arange(len(x_train));
     np.random.shuffle(s)
 
-    model = getRNNModel(height,width,3)
-    epochs = 20;
-    print(y_train)
+    model = get_CNN_Model(height,width,3)
+    epochs = 40;
     model.fit(x_train[s], y_train[s], validation_split=0.2, shuffle=True, epochs=epochs, batch_size=20, verbose=1)
-    model.save('classification_RNN.h5')
+    model.save('classification_CNN.h5')
 
 
 def test_model(files):
@@ -223,7 +260,7 @@ files_fake = get_all_files('../manipulated_sequences/Deepfakes/raw/videos/')
 files_original = get_all_files('../original_sequences/youtube/raw/videos/')
 file_original = ['../original.mp4']
 file_fake = ['../deepfake.mp4']
-train_model_CNN_LSTM(files_original,files_fake)
+train_model_RNN_or_CNN(files_original,files_fake)
 test_files = get_all_files('../test_files/')
 test_model_CNN_RNN(test_files)
 
