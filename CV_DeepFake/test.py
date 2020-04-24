@@ -179,23 +179,39 @@ def test_model_CNN_RNN(files):
 
 
 def train_model_RNN_or_CNN(files_original,files_fake):
-    x_train,count_incorrect,count_correct = get_faces_local_for_CNN(files_original,files_fake)
-    labels = []
+    original_file_iter = iter(files_original)
+    files_fake_iter = iter(files_fake)
+    original_file = next(original_file_iter, None)
+    fake_file = next(files_fake_iter, None)
+    model = get_CNN_Model(height, width, 3)
+    count = 0;
+    original_file_array = []
+    fake_file_array = []
+    # CNN_model = getCNNInceptionModel(height, width, 3)
+    # LSTM_model = getLSTMModel();
+    # CNN_LSTM_model = getCustomCNNLSTMModel(number_of_faces, height, width, 3)
+    while original_file is not None or fake_file is not None:
+        if original_file is not None:
+            original_file_array.append(original_file)
+        if fake_file is not None:
+            fake_file_array.append(fake_file)
+        count = count + 1
+        original_file = next(original_file_iter, None)
+        fake_file = next(files_fake_iter, None)
+        if (count == 3):
+            x_train,count_incorrect,count_correct,labels = get_faces_local_for_CNN(files_original,files_fake)
+            y_train = np.asarray(labels)
+            s = np.arange(len(x_train));
+            np.random.shuffle(s)
+            epochs = 40;
+            model.fit(x_train[s], y_train[s], validation_split=0.2, shuffle=True, epochs=epochs, batch_size=20, verbose=1)
+            count = 0
+            original_file_array = []
+            fake_file_array = []
+            del x_train
+    # del input_for_LSTM
+            del labels
 
-    for i in range (0,(count_incorrect)):
-        labels.append([0,1])
-
-    for i in range(0, (count_correct)):
-        labels.append([1,0])
-
-    y_train = np.asarray(labels)
-
-    s = np.arange(len(x_train));
-    np.random.shuffle(s)
-
-    model = get_CNN_Model(height,width,3)
-    epochs = 40;
-    model.fit(x_train[s], y_train[s], validation_split=0.2, shuffle=True, epochs=epochs, batch_size=20, verbose=1)
     model.save('classification_CNN.h5')
 
 
