@@ -183,7 +183,7 @@ def train_model_RNN_or_CNN(files_original,files_fake):
     files_fake_iter = iter(files_fake)
     original_file = next(original_file_iter, None)
     fake_file = next(files_fake_iter, None)
-    model = get_CNN_Model(height, width, 3)
+    model = get_CNN_Model(height, width)
     count = 0;
     original_file_array = []
     fake_file_array = []
