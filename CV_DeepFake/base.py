@@ -9,7 +9,40 @@ from face_detect_util.get_face import get_frames, get_faces,get_cropped_images
 
 height = 299
 width=299
-number_of_faces=5
+number_of_faces=40
+
+def get_all_files(folder):
+    filepaths = [os.path.join(folder, f) for f in os.listdir(folder)]
+    return filepaths
+
+files_fake = get_all_files('../manipulated_sequences/Deepfakes/raw/videos/')
+files_original = get_all_files('../original_sequences/youtube/raw/videos/')
+
+for file_fake,file_original in zip(files_fake,files_original):
+    frames = get_frames(file_fake, startingPoint=0)
+    faces = get_faces(frames, height=height, width=width, number_of_faces=number_of_faces)
+    if(len(faces)==number_of_faces):
+        for face in faces :
+            fig, ax = plt.subplots(1, 1, figsize=(15, 15))
+            ax.imshow(face)
+            ax.xaxis.set_visible(False)
+            ax.yaxis.set_visible(False)
+            ax.title.set_text(f"FRAME 0: {file_fake.split('/')[-1]}")
+            plt.grid(False)
+            plt.show()
+
+    frames = get_frames(file_original, startingPoint=0)
+    faces = get_faces(frames, height=height, width=width, number_of_faces=number_of_faces)
+    if (len(faces) == number_of_faces):
+        for face in faces:
+            fig, ax = plt.subplots(1, 1, figsize=(15, 15))
+            ax.imshow(face)
+            ax.xaxis.set_visible(False)
+            ax.yaxis.set_visible(False)
+            ax.title.set_text(f"FRAME 0: {files_original.split('/')[-1]}")
+            plt.grid(False)
+            plt.show()
+
 video_file = '/Users/jatinarora/CV_DeepFake/manipulated_sequences/Deepfakes/raw/videos/284_263.mp4'
 
 frames = get_frames(video_file, startingPoint=0)

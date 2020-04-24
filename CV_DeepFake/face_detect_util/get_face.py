@@ -2,9 +2,12 @@
 import cv2 as cv
 import face_recognition
 import math
-
-import matplotlib.pylab as plt
 import numpy as np
+from skimage.restoration import (denoise_wavelet, estimate_sigma)
+from skimage import  img_as_float
+from skimage.util import random_noise
+
+sigma = 0.12
 
 def get_frames(video_path,number_of_frames=-1,startingPoint=0):
     cap = cv.VideoCapture(video_path)
@@ -40,7 +43,39 @@ def get_faces(frames,height=-1,width=-1,number_of_faces=-1):
             face_image = frames[i][top:bottom, left:right]
             dsize = (width, height)
             face_image = cv.resize(face_image,dsize)
-            # if (height!=-1 and (bottom-top) < height):
+            original = img_as_float(face_image)
+
+            noisy = random_noise(original, var=sigma ** 2)
+            sigma_est_true = estimate_sigma(noisy, multichannel=True, average_sigmas=True)
+            fixed_noisy_true = denoise_wavelet(noisy, multichannel=True, convert2ycbcr=True,
+                                               method='VisuShrink', mode='soft',
+                                               sigma=sigma_est_true / 4, rescale_sigma=True)
+            photo = original - fixed_noisy_true
+            face_image = np.array(photo)
+            face_images.append(face_image)
+            collected_faces = collected_faces+1;
+            ## TODO: Limiting to one face per video
+            break;
+    print("Addded These many faces ", len(face_images))
+    return np.asarray(face_images)
+
+
+def get_cropped_images(frames,height,width):
+    images = []
+    for i in range(0, len(frames)):
+        frame = frames[i];
+        rows,cols,channels = frame.shape
+        dist_height = height/2
+        top = math.ceil(rows/2)-math.ceil(dist_height)
+        bottom = math.ceil(rows/2)+math.floor(dist_height)
+        dist_width = width/2
+        left = math.ceil(cols/2)-math.ceil(dist_width)
+        right = math.ceil(cols/2)+math.floor(dist_width)
+        images.append(frame[top:bottom,left:right])
+
+    return images
+
+ # if (height!=-1 and (bottom-top) < height):
             #     diff = height - (bottom-top)
             #     top = top - math.ceil(diff/2)
             #     bottom = bottom + math.floor(diff/2)
@@ -76,38 +111,3 @@ def get_faces(frames,height=-1,width=-1,number_of_faces=-1):
             #     right = max_width-1
             #
             # face_image = frames[i][top:bottom, left:right]
-            face_image = np.array(face_image)
-           ##################
-
-            #print("top: "+str(top) + " bottom: "+str(bottom) + " left: "+str(left)+" right "+str(right))
-
-            # if(bottom-top<height):
-            #     np.pad(face_image,((0,height-(bottom-top)),(0,0)),'constant')
-            # if(right-left<height):
-            #     np.pad(face_image,((0,0),(0,width-(right-left))),'constant')
-
-            ####################
-           # print("Face_image_size: "+str(face_image.shape))
-            face_images.append(face_image)
-            collected_faces = collected_faces+1;
-            ## TODO: Limiting to one face per video
-            break;
-    print("Addded These many faces ", len(face_images))
-    return np.asarray(face_images)
-
-
-def get_cropped_images(frames,height,width):
-    images = []
-    for i in range(0, len(frames)):
-        frame = frames[i];
-        rows,cols,channels = frame.shape
-        dist_height = height/2
-        top = math.ceil(rows/2)-math.ceil(dist_height)
-        bottom = math.ceil(rows/2)+math.floor(dist_height)
-        dist_width = width/2
-        left = math.ceil(cols/2)-math.ceil(dist_width)
-        right = math.ceil(cols/2)+math.floor(dist_width)
-        images.append(frame[top:bottom,left:right])
-
-    return images
-

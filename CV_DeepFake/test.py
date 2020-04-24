@@ -10,8 +10,8 @@ from os.path import isfile, join
 framesFromFile1 = 500
 framesFromFile2 = 500
 
-height = 299
-width = 299
+height = 320
+width = 320
 
 number_of_faces = 40
 
