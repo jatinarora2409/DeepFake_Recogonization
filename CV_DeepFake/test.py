@@ -198,7 +198,9 @@ def train_model_RNN_or_CNN(files_original,files_fake):
         count = count + 1
         original_file = next(original_file_iter, None)
         fake_file = next(files_fake_iter, None)
+        print("Count: "+str(count))
         if (count == 3):
+            print("Took 3 Out")
             x_train,count_incorrect,count_correct,labels = get_faces_local_for_CNN(files_original,files_fake)
             y_train = np.asarray(labels)
             s = np.arange(len(x_train));
