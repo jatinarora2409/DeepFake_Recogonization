@@ -58,8 +58,6 @@ def get_faces_local(files_original,files_fake):
 def get_faces_local_for_CNN(files_original,files_fake):
     np.set_printoptions(threshold=sys.maxsize)
     tempFaces = []
-    print(files_original)
-    print(files_fake)
 
     labels = []
 
@@ -181,7 +179,7 @@ def test_model_CNN_RNN(files):
 
 
 def train_model_RNN_or_CNN(files_original,files_fake):
-    x_train,count_incorrect,count_correct = get_faces_local(files_original,files_fake)
+    x_train,count_incorrect,count_correct = get_faces_local_for_CNN(files_original,files_fake)
     labels = []
 
     for i in range (0,(count_incorrect)):
