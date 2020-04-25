@@ -7,8 +7,8 @@ import os
 import cv2
 from os.path import isfile, join
 
-framesFromFile1 = 500
-framesFromFile2 = 500
+framesFromFile1 = 200
+framesFromFile2 = 200
 
 height = 320
 width = 320
@@ -128,12 +128,6 @@ def train_model_CNN_LSTM(files_original,files_fake):
             #input_for_LSTM = CNN_model.predict(x_train);
             #print("Shape of input_for_LSTM before reshape"+str(input_for_LSTM.shape))
             input_for_LSTM = x_train.reshape(len(labels),number_of_faces,height,width,3)
-            if(testing):
-             file2.write(str(input_for_LSTM[0][0]))
-             print(str(input_for_LSTM[0][0]))
-             file1.close()
-             file2.close()
-            testing=False
 
            #print("Shape of input_for_LSTM after reshape"+str(input_for_LSTM.shape))
             y_train = np.asarray(labels)
@@ -201,7 +195,7 @@ def train_model_RNN_or_CNN(files_original,files_fake):
         print("Count: "+str(count))
         if (count == 3):
             print("Took 3 Out")
-            x_train,count_incorrect,count_correct,labels = get_faces_local_for_CNN(files_original,files_fake)
+            x_train,count_incorrect,count_correct,labels = get_faces_local_for_CNN(original_file_array,fake_file_array)
             y_train = np.asarray(labels)
             s = np.arange(len(x_train));
             np.random.shuffle(s)
