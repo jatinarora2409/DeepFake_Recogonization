@@ -5,6 +5,7 @@ from skimage import data, img_as_float
 from skimage.util import random_noise
 from skimage.metrics import peak_signal_noise_ratio
 from face_detect_util.get_face import get_frames, get_faces,get_cropped_images
+import cv2 as cv
 
 import os
 
@@ -21,35 +22,20 @@ files_fake = get_all_files('../../manipulated_sequences/Deepfakes/raw/videos/')
 files_original = get_all_files('../../original_sequences/youtube/raw/videos/')
 
 
-
-
-frames = get_frames(files_fake[1], startingPoint=0)
-faces = get_faces(frames, height=height, width=width, number_of_faces=number_of_faces)
-
-for face in faces:
-    original = img_as_float(face)
-    sigma = 0.12
-    noisy = random_noise(original, var=sigma**2)
-    sigma_est_true = estimate_sigma(noisy, multichannel=True, average_sigmas=True)
-    fixed_noisy_true = denoise_wavelet(noisy, multichannel=True, convert2ycbcr=True,
-                                       method='VisuShrink', mode='soft',
-                                       sigma=sigma_est_true / 4, rescale_sigma=True)
-    fig, ax = plt.subplots(1, 1, figsize=(15, 15))
-    photo = original-fixed_noisy_true
-    ax.imshow(photo)
-    ax.imshow(original)
-
-
-ax.xaxis.set_visible(False)
-ax.yaxis.set_visible(False)
-plt.grid(False)
-plt.show()
+for file in files_fake:
+    frames = get_frames(file, startingPoint=0)
+    faces = get_faces(frames, height=height, width=width, number_of_faces=1)
+    if(len(faces)>0):
+        photo = cv.Canny(faces[0],0,10)
+        fig, ax = plt.subplots(1, 1, figsize=(15, 15))
+        ax.xaxis.set_visible(False)
+        ax.yaxis.set_visible(False)
+        plt.grid(False)
+        ax.imshow(photo)
+        plt.show()
 
 
 
-
-
-print(noisy.shape)
 
 # fig, ax = plt.subplots(nrows=2, ncols=3, figsize=(8, 5),
 #                        sharex=True, sharey=True)

@@ -6,10 +6,10 @@ from keras import applications
 from keras.optimizers import SGD, Adam
 
 
-def get_CNN_Model(height,width):
+def get_CNN_Model(height,width,channels):
     model = Sequential()
     model.add(Convolution2D(24, (5,5), border_mode="same", init='he_normal',
-                            input_shape=(height,width, 3),data_format="channels_last"))
+                            input_shape=(height,width, channels),data_format="channels_last"))
     model.add(Activation("relu"))
     model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2), border_mode="valid"))
     model.add(Convolution2D(36, (5, 5)))

@@ -27,7 +27,7 @@ def get_frames(video_path,number_of_frames=-1,startingPoint=0):
         # ax.imshow(image)
         # plt.show()
     cap.release()
-    print(" From Video File " + str(video_path) )
+    print(" From Video File " + str(video_path))
     return images
 
 def get_faces(frames,height=-1,width=-1,number_of_faces=-1):
@@ -43,14 +43,15 @@ def get_faces(frames,height=-1,width=-1,number_of_faces=-1):
             face_image = frames[i][top:bottom, left:right]
             dsize = (width, height)
             face_image = cv.resize(face_image,dsize)
-            original = img_as_float(face_image)
+            photo = cv.Canny(face_image,0,30)
 
-            noisy = random_noise(original, var=sigma ** 2)
-            sigma_est_true = estimate_sigma(noisy, multichannel=True, average_sigmas=True)
-            fixed_noisy_true = denoise_wavelet(noisy, multichannel=True, convert2ycbcr=True,
-                                               method='VisuShrink', mode='soft',
-                                               sigma=sigma_est_true / 4, rescale_sigma=True)
-            photo = original - fixed_noisy_true
+            # original = img_as_float(face_image)
+            # noisy = random_noise(original, var=sigma ** 2)
+            # sigma_est_true = estimate_sigma(noisy, multichannel=True, average_sigmas=True)
+            # fixed_noisy_true = denoise_wavelet(noisy, multichannel=True, convert2ycbcr=True,
+            #                                    method='VisuShrink', mode='soft',
+            #                                    sigma=sigma_est_true / 4, rescale_sigma=True)
+            # photo = original - fixed_noisy_true
             face_image = np.array(photo)
             face_images.append(face_image)
             collected_faces = collected_faces+1;

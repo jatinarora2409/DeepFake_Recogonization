@@ -4,6 +4,8 @@ import numpy as np
 import sys
 from keras.models import load_model,Model
 import os
+import matplotlib.pyplot as plt
+
 import cv2
 from os.path import isfile, join
 
@@ -177,7 +179,7 @@ def train_model_RNN_or_CNN(files_original,files_fake):
     files_fake_iter = iter(files_fake)
     original_file = next(original_file_iter, None)
     fake_file = next(files_fake_iter, None)
-    model = get_CNN_Model(height, width)
+    model = get_CNN_Model(height, width,1)
     count = 0;
     original_file_array = []
     fake_file_array = []
@@ -197,10 +199,10 @@ def train_model_RNN_or_CNN(files_original,files_fake):
             print("Took 3 Out")
             x_train,count_incorrect,count_correct,labels = get_faces_local_for_CNN(original_file_array,fake_file_array)
             y_train = np.asarray(labels)
-            s = np.arange(len(x_train));
-            np.random.shuffle(s)
+            x_train_shape = x_train.shape
+            x_train = x_train.reshape(x_train_shape[0], x_train_shape[1], x_train_shape[2], 1)
             epochs = 40;
-            model.fit(x_train[s], y_train[s], validation_split=0.2, shuffle=True, epochs=epochs, batch_size=20, verbose=1)
+            model.fit(x_train, y_train, validation_split=0.2, shuffle=True, epochs=epochs, batch_size=20, verbose=1)
             count = 0
             original_file_array = []
             fake_file_array = []
@@ -210,6 +212,16 @@ def train_model_RNN_or_CNN(files_original,files_fake):
 
     model.save('classification_CNN.h5')
 
+
+def show_input(x_train,y_train):
+    for i in range(0,len(x_train)):
+        if(y_train[i][0]==1):
+            fig, ax = plt.subplots(1, 1, figsize=(15, 15))
+            ax.xaxis.set_visible(False)
+            ax.yaxis.set_visible(False)
+            plt.grid(False)
+            ax.imshow(x_train[i])
+            plt.show()
 
 def test_model(files):
     model = load_model('classification_CNN.h5')
