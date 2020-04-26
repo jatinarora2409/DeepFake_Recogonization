@@ -212,7 +212,7 @@ def train_model_RNN_or_CNN(files_original,files_fake):
 
 
 def test_model(files):
-    model = load_model('classification_RNN.h5')
+    model = load_model('classification_CNN.h5')
     for file in files:
         frames = get_frames(file, number_of_frames=40, startingPoint=0)
         tempFaces = (get_faces(frames,height=height,width=width))
@@ -272,7 +272,7 @@ file_original = ['../original.mp4']
 file_fake = ['../deepfake.mp4']
 train_model_RNN_or_CNN(files_original,files_fake)
 test_files = get_all_files('../test_files/')
-test_model_CNN_RNN(test_files)
+test_model(test_files)
 
 def check_output(file):
     img = cv2.imread(file)
