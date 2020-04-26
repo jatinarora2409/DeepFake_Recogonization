@@ -229,6 +229,8 @@ def test_model(files):
         frames = get_frames(file, number_of_frames=40, startingPoint=0)
         tempFaces = (get_faces(frames,height=height,width=width))
         testFaces = np.asarray(tempFaces)
+        testFaces_shape = testFaces.shape
+        testFaces = testFaces.reshape(testFaces_shape[0], testFaces_shape[1], testFaces_shape[2], 1)
         print(testFaces[0].shape)
         #testFaces = np.concatenate(testFaces)
         print(testFaces.shape)
@@ -282,7 +284,7 @@ files_fake = get_all_files('../manipulated_sequences/Deepfakes/raw/videos/')
 files_original = get_all_files('../original_sequences/youtube/raw/videos/')
 file_original = ['../original.mp4']
 file_fake = ['../deepfake.mp4']
-train_model_RNN_or_CNN(files_original,files_fake)
+#train_model_RNN_or_CNN(files_original,files_fake)
 test_files = get_all_files('../test_files/')
 test_model(test_files)
 
