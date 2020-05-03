@@ -297,6 +297,10 @@ def train_model_CNN_LSTM_New(files_original,files_fake):
         labels.append(label)
         y_train = np.asarray(labels)
         CNN_LSTM_model.fit(input_for_LSTM, y_train, epochs=20, verbose=1)
+        del faces
+        del input_for_LSTM
+        del frames
+
     CNN_LSTM_model.save('CNN_New_lstmModel.h5')
 
 
