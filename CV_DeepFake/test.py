@@ -311,7 +311,8 @@ file_original = ['../original.mp4']
 file_fake = ['../deepfake.mp4']
 train_model_CNN_LSTM_New(files_original,files_fake)
 test_files = get_all_files('../test_files/')
-test_model(test_files)
+#test_model(test_files)
+print("Testing needs to be done ")
 
 def check_output(file):
     img = cv2.imread(file)
