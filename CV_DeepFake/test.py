@@ -106,9 +106,6 @@ def train_model_CNN_LSTM(files_original,files_fake):
     #CNN_model = getCNNInceptionModel(height, width, 3)
     #LSTM_model = getLSTMModel();
     CNN_LSTM_model = getCustomCNNLSTMModel(number_of_faces,height,width,3)
-    file1 = open("MyFile.txt", "a")
-    file2 = open("MyFile2.txt","a")
-    testing = True
     while original_file is not None or fake_file is not None :
         if original_file is not None:
             original_file_array.append(original_file)
@@ -123,9 +120,6 @@ def train_model_CNN_LSTM(files_original,files_fake):
             print("\n\n")
             print("Shape of X_train: " + str(x_train.shape))
             print("Shape of X_train, single frame " + str(x_train[0].shape))
-            if(testing):
-                file1.write(str(x_train[0]))
-                print(str(x_train[0]))
 
             #input_for_LSTM = CNN_model.predict(x_train);
             #print("Shape of input_for_LSTM before reshape"+str(input_for_LSTM.shape))
@@ -147,7 +141,7 @@ def train_model_CNN_LSTM(files_original,files_fake):
     CNN_LSTM_model.save('CNN_lstmModel.h5')
 
 
-def test_model_CNN_RNN(files):
+def test_model_CNN_Lstm(files):
     model = load_model('CNN_lstmModel.h5')
     count = 0
     tempFaces = []
@@ -200,7 +194,8 @@ def train_model_RNN_or_CNN(files_original,files_fake):
             x_train,count_incorrect,count_correct,labels = get_faces_local_for_CNN(original_file_array,fake_file_array)
             y_train = np.asarray(labels)
             x_train_shape = x_train.shape
-            x_train = x_train.reshape(x_train_shape[0], x_train_shape[1], x_train_shape[2], 1)
+            #x_train = x_train.reshape(x_train_shape[0], x_train_shape[1], x_train_shape[2], 1)
+            show_input(x_train, y_train)
             epochs = 40;
             model.fit(x_train, y_train, validation_split=0.2, shuffle=True, epochs=epochs, batch_size=20, verbose=1)
             count = 0
@@ -215,12 +210,13 @@ def train_model_RNN_or_CNN(files_original,files_fake):
 
 def show_input(x_train,y_train):
     for i in range(0,len(x_train)):
-        if(y_train[i][0]==1):
+        # if(y_train[i][0]==1):
             fig, ax = plt.subplots(1, 1, figsize=(15, 15))
             ax.xaxis.set_visible(False)
             ax.yaxis.set_visible(False)
             plt.grid(False)
             ax.imshow(x_train[i])
+            print(y_train[i])
             plt.show()
 
 def test_model(files):
@@ -284,7 +280,7 @@ files_fake = get_all_files('../manipulated_sequences/Deepfakes/raw/videos/')
 files_original = get_all_files('../original_sequences/youtube/raw/videos/')
 file_original = ['../original.mp4']
 file_fake = ['../deepfake.mp4']
-#train_model_RNN_or_CNN(files_original,files_fake)
+train_model_CNN_LSTM(files_original,files_fake)
 test_files = get_all_files('../test_files/')
 test_model(test_files)
 
