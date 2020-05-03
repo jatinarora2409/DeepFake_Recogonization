@@ -99,12 +99,9 @@ def train_model_CNN_LSTM(files_original,files_fake):
     files_fake_iter = iter(files_fake)
     original_file = next(original_file_iter,None)
     fake_file = next(files_fake_iter,None)
-
     count = 0;
     original_file_array = []
     fake_file_array=[]
-    #CNN_model = getCNNInceptionModel(height, width, 3)
-    #LSTM_model = getLSTMModel();
     CNN_LSTM_model = getCustomCNNLSTMModel(number_of_faces,height,width,3)
     while original_file is not None or fake_file is not None :
         if original_file is not None:
@@ -114,7 +111,7 @@ def train_model_CNN_LSTM(files_original,files_fake):
         count = count + 1
         original_file = next(original_file_iter, None)
         fake_file = next(files_fake_iter, None)
-        if(count==3):
+        if(count==1):
             x_train,count_incorrect,count_correct,labels = get_faces_local(original_file_array,fake_file_array)
             x_train = np.array(x_train)
             print("\n\n")
@@ -189,7 +186,7 @@ def train_model_RNN_or_CNN(files_original,files_fake):
         original_file = next(original_file_iter, None)
         fake_file = next(files_fake_iter, None)
         print("Count: "+str(count))
-        if (count == 3):
+        if (count == 1):
             print("Took 3 Out")
             x_train,count_incorrect,count_correct,labels = get_faces_local_for_CNN(original_file_array,fake_file_array)
             y_train = np.asarray(labels)
@@ -276,11 +273,39 @@ def test_model(files):
     # y_test_result = model.predict(X_test)
     # print("result:", y_test_result)
 
+
+
+def train_model_CNN_LSTM_New(files_original,files_fake):
+    files = []
+    files.extend(files_original)
+    files.extend(files_fake)
+    np.random.shuffle(files)
+    CNN_LSTM_model = getCustomCNNLSTMModel(number_of_faces,height,width,3)
+    for file in files:
+        frames = get_frames(file, startingPoint=0)
+        faces = get_faces(frames, height=height, width=width, number_of_faces=number_of_faces)
+        faces = np.asarray(faces);
+        faces = np.array(faces);
+        if (len(faces) != number_of_faces):
+            continue
+        if(file  in files_original):
+            label  = [0, 1]
+        if(file in files_fake):
+            label = [1, 0]
+        input_for_LSTM = faces.reshape(1, number_of_faces, height, width, 3)
+        labels = []
+        labels.append(label)
+        y_train = np.asarray(labels)
+        CNN_LSTM_model.fit(input_for_LSTM, y_train, epochs=20, verbose=1)
+    CNN_LSTM_model.save('CNN_New_lstmModel.h5')
+
+
+
 files_fake = get_all_files('../manipulated_sequences/Deepfakes/raw/videos/')
 files_original = get_all_files('../original_sequences/youtube/raw/videos/')
 file_original = ['../original.mp4']
 file_fake = ['../deepfake.mp4']
-train_model_CNN_LSTM(files_original,files_fake)
+train_model_CNN_LSTM_New(files_original,files_fake)
 test_files = get_all_files('../test_files/')
 test_model(test_files)
 
