@@ -43,9 +43,10 @@ def get_faces(frames,height=-1,width=-1,number_of_faces=-1):
             face_image = frames[i][top:bottom, left:right]
             dsize = (width, height)
             face_image = cv.resize(face_image,dsize)
-
+            norm_img = np.zeros((width, height))
+            final_img = cv.normalize(face_image, norm_img, 0, 255, cv.NORM_MINMAX)
             # Show the picture
-            photo = cv.Laplacian(face_image, cv.CV_64F)
+            photo = cv.Laplacian(final_img, cv.CV_64F)
 
             # original = img_as_float(face_image)
             # noisy = random_noise(original, var=sigma ** 2)
