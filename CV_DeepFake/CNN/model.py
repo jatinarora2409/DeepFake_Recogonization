@@ -85,6 +85,7 @@ def getCustomCNNLSTMModel(batch_size,height,width,channels):
     model.add(TimeDistributed(Flatten()))
     model.add(LSTM(64,activation='relu',dropout=0.5,stateful=False))
     model.add(Dense(1024,activation='relu'))
+    model.add(Dense(512,activation='relu'))
     model.add(Dropout(0.5))
     x = model.output
     predictions = Dense(2, activation='softmax')(x)
