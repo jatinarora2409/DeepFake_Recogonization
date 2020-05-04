@@ -138,8 +138,8 @@ def train_model_CNN_LSTM(files_original,files_fake):
     CNN_LSTM_model.save('CNN_lstmModel.h5')
 
 
-def test_model_CNN_Lstm(files):
-    model = load_model('CNN_lstmModel.h5')
+def test_model_CNN_Lstm(model_name,files):
+    model = load_model(model_name)
     count = 0
     tempFaces = []
     for file in files:
@@ -311,7 +311,7 @@ file_original = ['../original.mp4']
 file_fake = ['../deepfake.mp4']
 train_model_CNN_LSTM_New(files_original,files_fake)
 test_files = get_all_files('../test_files/')
-#test_model(test_files)
+test_model_CNN_Lstm("CNN_New_lstmModel.h5",test_files)
 print("Testing needs to be done ")
 
 def check_output(file):
